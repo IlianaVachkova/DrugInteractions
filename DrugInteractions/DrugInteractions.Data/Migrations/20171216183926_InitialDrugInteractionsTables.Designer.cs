@@ -11,9 +11,10 @@ using System;
 namespace DrugInteractions.Data.Migrations
 {
     [DbContext(typeof(DrugInteractionsDbContext))]
-    partial class DrugInteractionsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20171216183926_InitialDrugInteractionsTables")]
+    partial class InitialDrugInteractionsTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

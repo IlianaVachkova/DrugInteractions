@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using DrugInteractions.Web.Models.ManageViewModels;
 using DrugInteractions.Web.Services;
-using DrugInteractions.Data.Models.User;
+using DrugInteractions.Data.Models.Users;
 
 namespace DrugInteractions.Web.Controllers
 {
