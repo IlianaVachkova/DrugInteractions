@@ -13,7 +13,6 @@ namespace DrugInteractions.Data
         public DrugInteractionsDbContext(DbContextOptions<DrugInteractionsDbContext> options)
             : base(options)
         {
-            this.Database.Migrate();
         }
 
         public DbSet<Brand> Brands { get; set; }

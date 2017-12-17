@@ -7,6 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using DrugInteractions.Web.Services;
 using DrugInteractions.Data;
 using DrugInteractions.Data.Models.Users;
+using AutoMapper;
+using DrugInteractions.Web.Infrastructure.Extensions;
 
 namespace DrugInteractions.Web
 {
@@ -29,6 +31,8 @@ namespace DrugInteractions.Web
                 .AddEntityFrameworkStores<DrugInteractionsDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.AddAutoMapper();
+
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
 
@@ -38,6 +42,8 @@ namespace DrugInteractions.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseDatabaseMigration();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
