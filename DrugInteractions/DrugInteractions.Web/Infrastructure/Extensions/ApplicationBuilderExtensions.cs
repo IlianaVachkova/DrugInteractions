@@ -42,7 +42,7 @@ namespace DrugInteractions.Web.Infrastructure.Extensions
                            }
                        }
 
-                       var adminEmail = "admin@drugss.com";
+                       var adminEmail = "admin@drugs.com";
 
                        var adminUser = await userManager.FindByEmailAsync(adminEmail);
 
@@ -60,7 +60,7 @@ namespace DrugInteractions.Web.Infrastructure.Extensions
                            };
                        }
 
-                       await userManager.CreateAsync(adminUser, "adminDrug1234");
+                       await userManager.CreateAsync(adminUser, "adminDrug");
 
                        await userManager.AddToRoleAsync(adminUser, adminName);
                    })
