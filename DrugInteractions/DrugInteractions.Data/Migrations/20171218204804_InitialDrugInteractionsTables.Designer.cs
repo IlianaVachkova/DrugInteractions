@@ -11,7 +11,7 @@ using System;
 namespace DrugInteractions.Data.Migrations
 {
     [DbContext(typeof(DrugInteractionsDbContext))]
-    [Migration("20171216183926_InitialDrugInteractionsTables")]
+    [Migration("20171218204804_InitialDrugInteractionsTables")]
     partial class InitialDrugInteractionsTables
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

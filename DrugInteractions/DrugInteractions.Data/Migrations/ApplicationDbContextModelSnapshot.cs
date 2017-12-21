@@ -11,7 +11,7 @@ using System;
 namespace DrugInteractions.Data.Migrations
 {
     [DbContext(typeof(DrugInteractionsDbContext))]
-    partial class DrugInteractionsDbContextModelSnapshot : ModelSnapshot
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
