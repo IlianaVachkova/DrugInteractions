@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DrugInteractions.Services.Admin.Implementations
 {
-    public class AdminUserService
+    public class AdminUserService : IAdminUserService
     {
         private readonly DrugInteractionsDbContext db;
 

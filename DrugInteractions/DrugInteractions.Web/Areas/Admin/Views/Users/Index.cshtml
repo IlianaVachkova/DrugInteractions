@@ -1,0 +1,26 @@
+﻿@model UserListingViewModel
+@{
+    ViewData["Title"] = "User Administration";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>E-mail</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model.Users)
+        {
+            <tr>
+                <th>@user.Username</th>
+                <th>@user.Email</th>
+                <th></th>
+            </tr>
+        }
+    </tbody>
+</table>

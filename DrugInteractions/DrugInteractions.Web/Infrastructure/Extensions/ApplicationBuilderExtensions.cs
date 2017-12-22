@@ -22,49 +22,49 @@ namespace DrugInteractions.Web.Infrastructure.Extensions
                 var roleManager = serviceScope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
 
                 Task
-                   .Run(async () =>
-                   {
-                       var adminName = WebConstants.AdministratorRole;
+                  .Run(async () =>
+                  {
+                      var adminName = WebConstants.AdministratorRole;
 
-                       var roles = new[]
-                       {
-                          adminName,
-                          WebConstants.RepresentativeRole
-                       };
+                      var roles = new[]
+                      {
+                       adminName,
+                       WebConstants.RepresentativeRole
+                      };
 
-                       foreach (var role in roles)
-                       {
-                           var roleExists = await roleManager.RoleExistsAsync(role);
+                      foreach (var role in roles)
+                      {
+                          var roleExists = await roleManager.RoleExistsAsync(role);
 
-                           if (!roleExists)
-                           {
-                               await roleManager.CreateAsync(new IdentityRole { Name = role });
-                           }
-                       }
+                          if (!roleExists)
+                          {
+                              await roleManager.CreateAsync(new IdentityRole { Name = role });
+                          }
+                      }
 
-                       var adminEmail = "admin@drugs.com";
+                      var adminEmail = "admin@drugs.com";
 
-                       var adminUser = await userManager.FindByEmailAsync(adminEmail);
+                      var adminUser = await userManager.FindByEmailAsync(adminEmail);
 
-                       if (adminUser == null)
-                       {
-                           adminUser = new User
-                           {
-                               Email = adminEmail,
-                               UserName = adminName,
-                               Name = adminName,
-                               BirthDate = DateTime.UtcNow,
-                               LinkedIn = "linkedin.com",
-                               Facebook = "facebook.com",
-                               DateOfAddition = DateTime.UtcNow,
-                           };
-                       }
+                      if (adminUser == null)
+                      {
+                          adminUser = new User
+                          {
+                              Email = adminEmail,
+                              UserName = adminName,
+                              Name = adminName,
+                              BirthDate = DateTime.UtcNow,
+                              LinkedIn = "linkedin.com",
+                              Facebook = "facebook.com",
+                              DateOfAddition = DateTime.UtcNow,
+                          };
+                      }
 
-                       await userManager.CreateAsync(adminUser, "adminDrug");
+                      await userManager.CreateAsync(adminUser, "adminDrug");
 
-                       await userManager.AddToRoleAsync(adminUser, adminName);
-                   })
-                   .Wait();
+                      await userManager.AddToRoleAsync(adminUser, adminName);
+                  })
+                     .Wait();
             }
 
             return app;

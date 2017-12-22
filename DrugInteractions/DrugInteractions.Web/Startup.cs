@@ -39,6 +39,8 @@ namespace DrugInteractions.Web
 
             services.AddAutoMapper();
 
+            services.AddDomainServices();
+
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
 
