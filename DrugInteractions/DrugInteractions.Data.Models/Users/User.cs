@@ -6,11 +6,15 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
+using static DrugInteractions.Data.Models.DataConstants;
+
 namespace DrugInteractions.Data.Models.Users
 {
     public class User : IdentityUser
     {
         [Required]
+        [MinLength(UserNameMinLength)]
+        [MaxLength(UserNameMaxLength)]
         public string Name { get; set; }
 
         public string Facebook { get; set; }
