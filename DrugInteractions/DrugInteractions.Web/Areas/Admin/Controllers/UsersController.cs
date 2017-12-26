@@ -1,6 +1,7 @@
 ﻿using DrugInteractions.Data.Models.Users;
 using DrugInteractions.Services.Admin;
 using DrugInteractions.Web.Areas.Admin.Models.Users;
+using DrugInteractions.Web.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -59,6 +60,8 @@ namespace DrugInteractions.Web.Areas.Admin.Controllers
             }
 
             await this.userManager.AddToRoleAsync(user, model.Role);
+
+            TempData.AddSuccessMessage($"User {user.UserName} successfully added to {model.Role} role!");
             return RedirectToAction(nameof(Index));
         }
     }
