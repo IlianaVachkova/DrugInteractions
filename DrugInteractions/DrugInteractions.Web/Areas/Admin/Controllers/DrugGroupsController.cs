@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using System.Threading.Tasks;
 
 namespace DrugInteractions.Web.Areas.Admin.Controllers
@@ -55,5 +56,33 @@ namespace DrugInteractions.Web.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public async Task<IActionResult> Update(int? drugGroupId)
+        {
+            var dbModel =await this.adminDrugGroupsService.GetById(drugGroupId);
+
+            if (dbModel == null)
+            {
+                return BadRequest();
+            }
+
+            var viewModel = Mapper.Map<AddDrugGroupFormModel>(dbModel);
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(AddDrugGroupFormModel model)
+        {
+            if (model == null)
+            {
+                return BadRequest();
+            }
+
+            var dbModel = Mapper.Map<DrugGroup>(model);
+
+            await this.adminDrugGroupsService.UpdateAsync(dbModel);
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

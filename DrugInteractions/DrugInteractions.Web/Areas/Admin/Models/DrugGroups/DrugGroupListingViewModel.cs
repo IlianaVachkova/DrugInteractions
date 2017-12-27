@@ -1,5 +1,4 @@
-﻿using DrugInteractions.Common.Mapping;
-using DrugInteractions.Services.Admin.Models;
+﻿using DrugInteractions.Services.Admin.Models;
 using System.Collections.Generic;
 
 namespace DrugInteractions.Web.Areas.Admin.Models.DrugGroups
