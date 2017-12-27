@@ -15,13 +15,12 @@ namespace DrugInteractions.Web.Areas.Admin.Controllers
     public class UsersController : BaseAdminController
     {
         private readonly IAdminUserService adminUsersService;
-        private readonly UserManager<User> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
 
         public UsersController(IAdminUserService adminUsersService, UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
+            :base(userManager)
         {
             this.adminUsersService = adminUsersService;
-            this.userManager = userManager;
             this.roleManager = roleManager;
         }
 
