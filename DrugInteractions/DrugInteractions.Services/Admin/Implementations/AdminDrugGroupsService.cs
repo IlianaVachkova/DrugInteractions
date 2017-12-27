@@ -39,9 +39,16 @@ namespace DrugInteractions.Services.Admin.Implementations
             await this.db.SaveChangesAsync();
         }
 
-        public async Task<DrugGroup> GetById(int? id)
+        public async Task<DrugGroup> GetByIdAsync(int? id)
         {
             return await this.db.DrugGroups.FindAsync(id);
+        }
+
+        public async Task DeleteAsync(DrugGroup model)
+        {
+            this.db.DrugGroups.Remove(model);
+
+            await this.db.SaveChangesAsync();
         }
     }
 }

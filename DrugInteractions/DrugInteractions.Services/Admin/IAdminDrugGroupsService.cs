@@ -13,6 +13,8 @@ namespace DrugInteractions.Services.Admin
 
         Task UpdateAsync(DrugGroup model);
 
-        Task<DrugGroup> GetById(int? id);
+        Task DeleteAsync(DrugGroup model);
+
+        Task<DrugGroup> GetByIdAsync(int? id);
     }
 }

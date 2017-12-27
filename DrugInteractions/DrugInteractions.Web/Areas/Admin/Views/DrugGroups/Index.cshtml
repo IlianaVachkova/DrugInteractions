@@ -2,9 +2,7 @@
 @{
     ViewData["Title"] = "All Drug Droups";
 }
-
 <h2>@ViewData["Title"]</h2>
-
 <table class="table table-bordered table-striped">
     <thead>
         <tr>
@@ -21,7 +19,7 @@
                 <th>@drug.Name</th>
                 <th>Details</th>
                 <th>Update</th>
-                <th>Delete</th>
+                <th><a href="@Url.Action("Delete", "DrugGroups", new { drugGroupId = drug.Id})">Delete</a></th>
             </tr>
         }
     </tbody>

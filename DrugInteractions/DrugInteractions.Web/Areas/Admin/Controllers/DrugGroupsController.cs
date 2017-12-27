@@ -6,9 +6,6 @@ using DrugInteractions.Web.Areas.Admin.Models.DrugGroups;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Threading.Tasks;
 
 namespace DrugInteractions.Web.Areas.Admin.Controllers
@@ -58,7 +55,7 @@ namespace DrugInteractions.Web.Areas.Admin.Controllers
 
         public async Task<IActionResult> Update(int? drugGroupId)
         {
-            var dbModel =await this.adminDrugGroupsService.GetById(drugGroupId);
+            var dbModel =await this.adminDrugGroupsService.GetByIdAsync(drugGroupId);
 
             if (dbModel == null)
             {
@@ -81,6 +78,20 @@ namespace DrugInteractions.Web.Areas.Admin.Controllers
             var dbModel = Mapper.Map<DrugGroup>(model);
 
             await this.adminDrugGroupsService.UpdateAsync(dbModel);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Delete(int? drugGroupId)
+        {
+            var dbModel = await this.adminDrugGroupsService.GetByIdAsync(drugGroupId);
+
+            if (dbModel==null)
+            {
+                return BadRequest();
+            }
+
+            await this.adminDrugGroupsService.DeleteAsync(dbModel);
 
             return RedirectToAction(nameof(Index));
         }
