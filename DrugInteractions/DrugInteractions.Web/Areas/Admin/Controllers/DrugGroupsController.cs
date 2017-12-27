@@ -22,9 +22,13 @@ namespace DrugInteractions.Web.Areas.Admin.Controllers
             this.adminDrugGroupsService = adminDrugGroupsService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var serviceModel = await adminDrugGroupsService.AllAsync();
+
+            var resultModel = new DrugGroupListingViewModel { DrugGroups = serviceModel };
+
+            return View(resultModel);
         }
 
         public IActionResult Create()

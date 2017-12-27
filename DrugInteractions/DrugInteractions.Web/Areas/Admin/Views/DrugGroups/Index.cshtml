@@ -1,7 +1,28 @@
-﻿
+﻿@model DrugGroupListingViewModel
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "All Drug Droups";
 }
 
-<h2>Index</h2>
+<h2>@ViewData["Title"]</h2>
 
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Details</th>
+            <th>Update</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var drug in Model.DrugGroups)
+        {
+            <tr>
+                <th>@drug.Name</th>
+                <th>Details</th>
+                <th>Update</th>
+                <th>Delete</th>
+            </tr>
+        }
+    </tbody>
+</table>

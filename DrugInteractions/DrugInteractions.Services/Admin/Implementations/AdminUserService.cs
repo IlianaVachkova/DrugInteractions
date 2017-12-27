@@ -17,9 +17,11 @@ namespace DrugInteractions.Services.Admin.Implementations
         }
 
         public async Task<IEnumerable<AdminUserListingServiceModel>> AllAsync()
-            => await this.db
-                .Users
-                .ProjectTo<AdminUserListingServiceModel>()
-                .ToListAsync();
+        {
+            return await this.db
+               .Users
+               .ProjectTo<AdminUserListingServiceModel>()
+               .ToListAsync();
+        }
     }
 }
