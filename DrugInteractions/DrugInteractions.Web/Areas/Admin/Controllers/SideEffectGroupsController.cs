@@ -20,9 +20,13 @@ namespace DrugInteractions.Web.Areas.Admin.Controllers
             this.adminSideEffectGroupsService = adminSideEffectGroupsService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var serviceModel = await adminSideEffectGroupsService.AllAsync();
+
+            var viewModel = new SideEffectGroupListingViewModel { SideEffectGroups = serviceModel };
+
+            return View(viewModel);
         }
 
         public IActionResult Create()

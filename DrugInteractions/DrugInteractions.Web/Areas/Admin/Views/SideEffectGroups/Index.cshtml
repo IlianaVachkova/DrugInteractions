@@ -1,7 +1,32 @@
-﻿
+﻿@model SideEffectGroupListingViewModel
 @{
     ViewData["Title"] = "Index";
 }
 
-<h2>Index</h2>
+<h2>@ViewData["Title"]</h2>
 
+<br />
+<a href="@Url.Action("Create", "SideEffectGroups")">Create</a>
+<br />
+<br />
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Details</th>
+            <th>Update</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var sideEffectGroup in Model.SideEffectGroups)
+        {
+            <tr>
+                <th>@sideEffectGroup.Name</th>
+                <th>Details</th>
+                <th>Update</th>
+                <th>Delete</th>
+            </tr>
+        }
+    </tbody>
+</table>
