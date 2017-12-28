@@ -31,5 +31,17 @@ namespace DrugInteractions.Services.Admin.Implementations
 
             await this.db.SaveChangesAsync();
         }
+
+        public async Task UpdateAsync(SideEffectGroup model)
+        {
+            this.db.SideEffectGroups.Update(model);
+
+            await this.db.SaveChangesAsync();
+        }
+
+        public async Task<SideEffectGroup> GetByIdAsync(int? id)
+        {
+            return await this.db.SideEffectGroups.FindAsync(id);
+        }
     }
 }

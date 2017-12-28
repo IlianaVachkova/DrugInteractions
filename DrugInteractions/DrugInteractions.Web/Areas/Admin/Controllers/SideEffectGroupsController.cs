@@ -52,5 +52,34 @@ namespace DrugInteractions.Web.Areas.Admin.Controllers
        
             return RedirectToAction(nameof(Index));
         }
+
+        public async Task<IActionResult> Update(int? sideEffectGroupId)
+        {
+            var dbModel = await this.adminSideEffectGroupsService.GetByIdAsync(sideEffectGroupId);
+
+            if (dbModel == null)
+            {
+                return BadRequest();
+            }
+
+            var viewModel = Mapper.Map<AddSideEffectGroupFormModel>(dbModel);
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(AddSideEffectGroupFormModel model)
+        {
+            if (model == null)
+            {
+                return BadRequest();
+            }
+
+            var dbModel = Mapper.Map<SideEffectGroup>(model);
+
+            await this.adminSideEffectGroupsService.UpdateAsync(dbModel);
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
