@@ -43,5 +43,12 @@ namespace DrugInteractions.Services.Admin.Implementations
         {
             return await this.db.SideEffectGroups.FindAsync(id);
         }
+
+        public async Task DeleteAsync(SideEffectGroup model)
+        {
+            this.db.SideEffectGroups.Remove(model);
+
+            await this.db.SaveChangesAsync();
+        }
     }
 }

@@ -14,5 +14,7 @@ namespace DrugInteractions.Services.Admin
         Task UpdateAsync(SideEffectGroup model);
 
         Task<SideEffectGroup> GetByIdAsync(int? id);
+
+        Task DeleteAsync(SideEffectGroup model);
     }
 }
