@@ -31,5 +31,17 @@ namespace DrugInteractions.Services.Admin.Implementations
 
             await this.db.SaveChangesAsync();
         }
+
+        public async Task UpdateAsync(Brand model)
+        {
+            this.db.Brands.Update(model);
+
+            await this.db.SaveChangesAsync();
+        }
+
+        public async Task<Brand> GetByIdAsync(int? id)
+        {
+            return await this.db.Brands.FindAsync(id);
+        }
     }
 }
