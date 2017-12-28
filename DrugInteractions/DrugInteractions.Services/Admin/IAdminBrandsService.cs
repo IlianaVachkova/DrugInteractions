@@ -14,5 +14,7 @@ namespace DrugInteractions.Services.Admin
         Task UpdateAsync(Brand model);
 
         Task<Brand> GetByIdAsync(int? id);
+
+        Task DeleteAsync(Brand model);
     }
 }

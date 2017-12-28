@@ -82,5 +82,19 @@ namespace DrugInteractions.Web.Areas.Admin.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        public async Task<IActionResult> Delete(int? brandId)
+        {
+            var dbModel = await this.adminBrandsService.GetByIdAsync(brandId);
+
+            if (dbModel == null)
+            {
+                return BadRequest();
+            }
+
+            await this.adminBrandsService.DeleteAsync(dbModel);
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

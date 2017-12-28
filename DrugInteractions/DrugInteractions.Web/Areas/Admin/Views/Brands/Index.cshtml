@@ -25,7 +25,7 @@
                 <th>@brand.WebSite</th>
                 <th>Details</th>
                 <th><a href="@Url.Action("Update", "Brands", new { brandId = brand.Id})">Update</a></th>
-                <th>Delete</th>
+                <th><a href="@Url.Action("Delete", "Brands", new { brandId = brand.Id})">Delete</a></th>
             </tr>
         }
     </tbody>
