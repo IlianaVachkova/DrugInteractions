@@ -21,9 +21,13 @@ namespace DrugInteractions.Web.Areas.Admin.Controllers
             this.adminBrandsService = adminBrandsService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var serviceModel = await adminBrandsService.AllAsync();
+
+            var viewModel = new BrandListingViewModel { Brands = serviceModel };
+
+            return View(viewModel);
         }
 
         public IActionResult Create()

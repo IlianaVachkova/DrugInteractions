@@ -24,9 +24,9 @@ namespace DrugInteractions.Web.Areas.Admin.Controllers
         {
             var serviceModel = await adminDrugGroupsService.AllAsync();
 
-            var resultModel = new DrugGroupListingViewModel { DrugGroups = serviceModel };
+            var viewModel = new DrugGroupListingViewModel { DrugGroups = serviceModel };
 
-            return View(resultModel);
+            return View(viewModel);
         }
 
         public IActionResult Create()

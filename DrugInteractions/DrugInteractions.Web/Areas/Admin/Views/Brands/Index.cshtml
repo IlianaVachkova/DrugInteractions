@@ -1,4 +1,32 @@
-﻿@{
+﻿@model BrandListingViewModel
+@{
     ViewData["Title"] = "Index";
 }
-<h2>Index</h2>
+<h2>@ViewData["Title"]</h2>
+<br/>
+<a href="@Url.Action("Create", "Brands")">Create</a>
+<br/>
+<br/>
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>WebSite</th>
+            <th>Details</th>
+            <th>Update</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var brand in Model.Brands)
+        {
+            <tr>
+                <th>@brand.Name</th>
+                <th>@brand.WebSite</th>
+                <th>Details</th>
+                <th>Update</th>
+                <th>Delete</th>
+            </tr>
+        }
+    </tbody>
+</table>
