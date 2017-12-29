@@ -14,4 +14,8 @@
     <ProjectReference Include="..\DrugInteractions.Data\DrugInteractions.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Representative\Model\" />
+  </ItemGroup>
+
 </Project>
