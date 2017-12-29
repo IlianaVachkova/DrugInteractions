@@ -21,9 +21,13 @@ namespace DrugInteractions.Web.Areas.Representative.Controllers
             this.representativeSideEffectService = representativeSideEffectService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var serviceModel = await representativeSideEffectService.AllAsync();
+
+            var viewModel = new SideEffectListingViewModel { SideEffects = serviceModel };
+
+            return View(viewModel);
         }
 
         public async Task<IActionResult> Create()
