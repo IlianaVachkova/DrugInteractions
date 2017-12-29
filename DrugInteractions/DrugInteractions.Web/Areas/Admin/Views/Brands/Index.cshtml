@@ -1,10 +1,10 @@
 ﻿@model BrandListingViewModel
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "All Brands";
 }
 <h2>@ViewData["Title"]</h2>
 <br/>
-<a href="@Url.Action("Create", "Brands")">Create</a>
+<a href="@Url.Action("Create", "Brands")" class="btn btn-success">Create</a>
 <br/>
 <br/>
 <table class="table table-bordered table-striped">
@@ -23,9 +23,9 @@
             <tr>
                 <th>@brand.Name</th>
                 <th>@brand.WebSite</th>
-                <th>Details</th>
-                <th><a href="@Url.Action("Update", "Brands", new { brandId = brand.Id})">Update</a></th>
-                <th><a href="@Url.Action("Delete", "Brands", new { brandId = brand.Id})">Delete</a></th>
+                <th><a href="#" class="btn btn-info">Details</a></th>
+                <th><a href="@Url.Action("Update", "Brands", new { brandId = brand.Id})" class="btn btn-warning">Update</a></th>
+                <th><a href="@Url.Action("Delete", "Brands", new { brandId = brand.Id})" class="btn btn-danger">Delete</a></th>
             </tr>
         }
     </tbody>

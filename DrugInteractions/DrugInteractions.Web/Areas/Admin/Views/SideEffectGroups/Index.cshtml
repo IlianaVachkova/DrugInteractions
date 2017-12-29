@@ -1,12 +1,12 @@
 ﻿@model SideEffectGroupListingViewModel
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "All Side Effect Groups";
 }
 
 <h2>@ViewData["Title"]</h2>
 
 <br />
-<a href="@Url.Action("Create", "SideEffectGroups")">Create</a>
+<a href="@Url.Action("Create", "SideEffectGroups")" class="btn btn-success">Create</a>
 <br />
 <br />
 <table class="table table-bordered table-striped">
@@ -23,9 +23,9 @@
         {
             <tr>
                 <th>@sideEffectGroup.Name</th>
-                <th>Details</th>
-                <th><a href="@Url.Action("Update", "SideEffectGroups", new { sideEffectGroupId = sideEffectGroup.Id})">Update</a></th>
-                <th><a href="@Url.Action("Delete", "SideEffectGroups", new { sideEffectGroupId = sideEffectGroup.Id})">Delete</a></th>
+                <th><a href="#" class="btn btn-info">Details</a></th>
+                <th><a href="@Url.Action("Update", "SideEffectGroups", new { sideEffectGroupId = sideEffectGroup.Id})" class="btn btn-warning">Update</a></th>
+                <th><a href="@Url.Action("Delete", "SideEffectGroups", new { sideEffectGroupId = sideEffectGroup.Id})" class="btn btn-danger">Delete</a></th>
             </tr>
         }
     </tbody>

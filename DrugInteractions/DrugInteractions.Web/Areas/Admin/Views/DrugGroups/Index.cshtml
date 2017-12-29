@@ -4,7 +4,7 @@
 }
 <h2>@ViewData["Title"]</h2>
 <br/>
-<a href="@Url.Action("Create", "DrugGroups")">Create</a>
+<a href="@Url.Action("Create", "DrugGroups")" class="btn btn-success">Create</a>
 <br/>
 <br/>
 <table class="table table-bordered table-striped">
@@ -21,9 +21,9 @@
         {
             <tr>
                 <th>@drug.Name</th>
-                <th>Details</th>
-                <th><a href="@Url.Action("Update", "DrugGroups", new { drugGroupId = drug.Id})">Update</a></th>
-                <th><a href="@Url.Action("Delete", "DrugGroups", new { drugGroupId = drug.Id})">Delete</a></th>
+                <th><a href="#" class="btn btn-info">Details</a></th>
+                <th><a href="@Url.Action("Update", "DrugGroups", new { drugGroupId = drug.Id})" class="btn btn-warning">Update</a></th>
+                <th><a href="@Url.Action("Delete", "DrugGroups", new { drugGroupId = drug.Id})" class="btn btn-danger">Delete</a></th>
             </tr>
         }
     </tbody>
