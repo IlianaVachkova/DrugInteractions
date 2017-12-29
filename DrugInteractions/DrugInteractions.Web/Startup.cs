@@ -9,6 +9,7 @@ using DrugInteractions.Data;
 using DrugInteractions.Data.Models.Users;
 using AutoMapper;
 using DrugInteractions.Web.Infrastructure.Extensions;
+using DrugInteractions.Web.Infrastructure.Populators;
 
 namespace DrugInteractions.Web
 {
@@ -43,6 +44,8 @@ namespace DrugInteractions.Web
 
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
+
+            services.AddTransient<IDropDownListPopulator, DropDownListPopulator>();
 
             services.AddMvc();
         }
