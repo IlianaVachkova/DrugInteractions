@@ -1,27 +1,27 @@
 ﻿using AutoMapper.QueryableExtensions;
 using DrugInteractions.Data;
 using DrugInteractions.Data.Models.SideEffects;
-using DrugInteractions.Services.Representative.Model;
+using DrugInteractions.Services.Repr.Model;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace DrugInteractions.Services.Representative.Implementations
+namespace DrugInteractions.Services.Repr.Implementations
 {
-    public class RepresentativeSideEffectsService : IRepresentativeSideEffectsService
+    public class ReprSideEffectsService : IReprSideEffectsService
     {
         private readonly DrugInteractionsDbContext db;
 
-        public RepresentativeSideEffectsService(DrugInteractionsDbContext db)
+        public ReprSideEffectsService(DrugInteractionsDbContext db)
         {
             this.db = db;
         }
 
-        public async Task<IEnumerable<RepresentativeSideEffectListingServiceModel>> AllAsync()
+        public async Task<IEnumerable<ReprSideEffectListingServiceModel>> AllAsync()
         {
             return await this.db
                 .SideEffects
-                .ProjectTo<RepresentativeSideEffectListingServiceModel>()
+                .ProjectTo<ReprSideEffectListingServiceModel>()
                 .ToListAsync();
         }
 

@@ -1,29 +1,29 @@
 ﻿using AutoMapper;
 using DrugInteractions.Data.Models.SideEffects;
 using DrugInteractions.Data.Models.Users;
-using DrugInteractions.Services.Representative;
-using DrugInteractions.Web.Areas.Representative.Models.SideEffects;
+using DrugInteractions.Services.Repr;
+using DrugInteractions.Web.Areas.Repr.Models.SideEffects;
 using DrugInteractions.Web.Infrastructure.Populators;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 
-namespace DrugInteractions.Web.Areas.Representative.Controllers
+namespace DrugInteractions.Web.Areas.Repr.Controllers
 {
-    public class SideEffectsController : BaseRepresentativeController
+    public class SideEffectsController : BaseReprController
     {
-        private readonly IRepresentativeSideEffectsService representativeSideEffectService;
+        private readonly IReprSideEffectsService reprSideEffectService;
 
-        public SideEffectsController(IRepresentativeSideEffectsService representativeSideEffectService, UserManager<User> userManager, IDropDownListPopulator populator)
+        public SideEffectsController(IReprSideEffectsService reprSideEffectService, UserManager<User> userManager, IDropDownListPopulator populator)
             : base(userManager, populator)
         {
-            this.representativeSideEffectService = representativeSideEffectService;
+            this.reprSideEffectService = reprSideEffectService;
         }
 
         public async Task<IActionResult> Index()
         {
-            var serviceModel = await representativeSideEffectService.AllAsync();
+            var serviceModel = await reprSideEffectService.AllAsync();
 
             var viewModel = new SideEffectListingViewModel { SideEffects = serviceModel };
 
@@ -55,7 +55,7 @@ namespace DrugInteractions.Web.Areas.Representative.Controllers
             dbModel.Admin = currentUser;
             dbModel.DateOfAddition = DateTime.UtcNow;
 
-            await this.representativeSideEffectService.CreateAsync(dbModel);
+            await this.reprSideEffectService.CreateAsync(dbModel);
 
             return RedirectToAction(nameof(Index));
         }

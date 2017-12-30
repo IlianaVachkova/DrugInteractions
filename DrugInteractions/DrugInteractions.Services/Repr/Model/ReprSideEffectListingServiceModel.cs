@@ -1,9 +1,9 @@
 ﻿using DrugInteractions.Common.Mapping;
 using DrugInteractions.Data.Models.SideEffects;
 
-namespace DrugInteractions.Services.Representative.Model
+namespace DrugInteractions.Services.Repr.Model
 {
-    public class RepresentativeSideEffectListingServiceModel : IMapFrom<SideEffect>
+    public class ReprSideEffectListingServiceModel : IMapFrom<SideEffect>
     {
         public int Id { get; set; }
 

@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace DrugInteractions.Web.Areas.Representative.Models.SideEffects
+namespace DrugInteractions.Web.Areas.Repr.Models.SideEffects
 {
     public class AddSideEffectFormModel : IMapFrom<SideEffect>
     {
