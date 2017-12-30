@@ -19,7 +19,7 @@ namespace DrugInteractions.Data.Models.Drugs
 
         public string Excipients { get; set; }
 
-        public string PharmaceuticalForm { get; set; }
+        public PharmaceuticalFormType PharmaceuticalForm { get; set; }
 
         public string Usage { get; set; }
 
