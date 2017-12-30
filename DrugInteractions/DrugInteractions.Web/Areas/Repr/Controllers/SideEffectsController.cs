@@ -90,5 +90,19 @@ namespace DrugInteractions.Web.Areas.Repr.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        public async Task<IActionResult> Delete(int? sideEffectId)
+        {
+            var dbModel = await this.reprSideEffectService.GetByIdAsync(sideEffectId);
+
+            if (dbModel == null)
+            {
+                return BadRequest();
+            }
+
+            await this.reprSideEffectService.DeleteAsync(dbModel);
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
