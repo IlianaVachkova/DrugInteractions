@@ -57,5 +57,37 @@ namespace DrugInteractions.Web.Areas.Repr.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        public async Task<IActionResult> Update(int? drugId)
+        {
+            var dbModel = await this.reprDrugsService.GetByIdAsync(drugId);
+
+            if (dbModel == null)
+            {
+                return BadRequest();
+            }
+
+            var viewModel = Mapper.Map<AddDrugFormModel>(dbModel);
+
+            viewModel.DrugGroups = await this.populator.GetDrugGroups();
+            viewModel.Brands = await this.populator.GetBrands();
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(AddDrugFormModel model)
+        {
+            if (model == null)
+            {
+                return BadRequest();
+            }
+
+            var dbModel = Mapper.Map<Drug>(model);
+
+            await this.reprDrugsService.UpdateAsync(dbModel);
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
