@@ -11,20 +11,26 @@ namespace DrugInteractions.Web.Infrastructure.Populators
     {
         private readonly IAdminSideEffectGroupsService sideEffectGroups;
 
+        private readonly IAdminBrandsService brandsService;
+
+        private readonly IAdminDrugGroupsService drugGroupsService;
+
         private readonly ICacheService cache;
 
-        public DropDownListPopulator(ICacheService cache, IAdminSideEffectGroupsService sideEffectGroups)
+        public DropDownListPopulator(ICacheService cache, IAdminSideEffectGroupsService sideEffectGroups, IAdminBrandsService brandsService, IAdminDrugGroupsService drugGroupsService)
         {
             this.cache = cache;
             this.sideEffectGroups = sideEffectGroups;
+            this.brandsService = brandsService;
+            this.drugGroupsService = drugGroupsService;
         }
 
         public async Task<IEnumerable<SelectListItem>> GetSideEffectGroups()
         {
-            var allSideEffectGroups =await this.sideEffectGroups.AllAsync();
+            var allSideEffectGroups = await this.sideEffectGroups.AllAsync();
 
             var sideEffectGroups = this.cache.Get<IEnumerable<SelectListItem>>("sideEffectGroups",
-                () => 
+                () =>
                 {
                     return allSideEffectGroups
                     .Select(seffgr => new SelectListItem
@@ -36,6 +42,44 @@ namespace DrugInteractions.Web.Infrastructure.Populators
                 });
 
             return sideEffectGroups;
+        }
+
+        public async Task<IEnumerable<SelectListItem>> GetDrugGroups()
+        {
+            var allDrugGroups = await this.drugGroupsService.AllAsync();
+
+            var drugGroups = this.cache.Get<IEnumerable<SelectListItem>>("drugGroups",
+                () =>
+                {
+                    return allDrugGroups
+                    .Select(dgr => new SelectListItem
+                    {
+                        Value = dgr.Id.ToString(),
+                        Text = dgr.Name
+                    })
+                    .ToList();
+                });
+
+            return drugGroups;
+        }
+
+        public async Task<IEnumerable<SelectListItem>> GetBrands()
+        {
+            var allBrands = await this.brandsService.AllAsync();
+
+            var brands = this.cache.Get<IEnumerable<SelectListItem>>("brands",
+                () =>
+                {
+                    return allBrands
+                    .Select(b => new SelectListItem
+                    {
+                        Value = b.Id.ToString(),
+                        Text = b.Name
+                    })
+                    .ToList();
+                });
+
+            return brands;
         }
     }
 }
