@@ -39,6 +39,11 @@
                         <li><a asp-area="Admin" asp-controller="DrugGroups" asp-action="Index">DrugGroups</a></li>
                         <li><a asp-area="Admin" asp-controller="SideEffectGroups" asp-action="Index">SideEffectGroups</a></li>
                     }
+                    @if (User.IsInRole(WebConstants.RepresentativeRole))
+                    {
+                        <li><a asp-area="Repr" asp-controller="Drugs" asp-action="Index">Drugs</a></li>
+                        <li><a asp-area="Repr" asp-controller="SideEffects" asp-action="Index">SideEffects</a></li>
+                    }
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
             </div>
