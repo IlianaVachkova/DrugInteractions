@@ -25,7 +25,7 @@
                 <th>@sideEffect.Name</th>
                 <th>@sideEffect.SideEffectGroup.Name</th>
                 <th>Details</th>
-                <th>Update</th>
+                <th><a href="@Url.Action("Update", "SideEffects", new { sideEffectId = sideEffect.Id})" class="btn btn-warning">Update</a></th>
                 <th>Delete</th>
             </tr>
         }

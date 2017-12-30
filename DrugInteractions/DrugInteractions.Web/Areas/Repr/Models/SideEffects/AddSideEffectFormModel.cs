@@ -24,6 +24,8 @@ namespace DrugInteractions.Web.Areas.Repr.Models.SideEffects
         [Display(Name="Side Effect")]
         public int SideEffectGroupId { get; set; }
 
+        public SideEffectGroup SideEffectGroup { get; set; }
+
         public IEnumerable<SelectListItem> SideEffectGroups { get; set; }
     }
 }
