@@ -1,4 +1,6 @@
 ﻿using DrugInteractions.Data.Models.Drugs;
+using DrugInteractions.Services.Repr.Model;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DrugInteractions.Services.Repr
@@ -10,5 +12,7 @@ namespace DrugInteractions.Services.Repr
         Task UpdateAsync(Drug model);
 
         Task<Drug> GetByIdAsync(int? id);
+
+        Task<IEnumerable<ReprDrugListingServiceModel>> AllAsync();
     }
 }

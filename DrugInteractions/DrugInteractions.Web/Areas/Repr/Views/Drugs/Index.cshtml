@@ -1,7 +1,45 @@
-﻿
+﻿@model DrugListingViewModel
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "All Drugs";
 }
 
-<h2>Index</h2>
+<h2>@ViewData["Title"]</h2>
 
+<a href="@Url.Action("Create", "Drugs")" class="btn btn-success">Create</a>
+<br />
+<br />
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Active substances</th>
+            <th>Excipients</th>
+            <th>Pharmaceutical form</th>
+            <th>Usage</th>
+            <th>Description</th>
+            <th>Drug group</th>
+            <th>Brand</th>
+            <th>Details</th>
+            <th>Update</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var drug in Model.Drugs)
+        {
+            <tr>
+                <th>@drug.Name</th>
+                <th>@drug.ActiveSubstances</th>
+                <th>@drug.Excipients</th>
+                <th>@drug.PharmaceuticalForm</th>
+                <th>@drug.Usage</th>
+                <th>@drug.Description</th>
+                <th>@drug.DrugGroup.Name</th>
+                <th>@drug.Brand.Name</th>
+                <th><a href="#" class="btn btn-info">Details</a></th>
+                <th><a href="@Url.Action("Update", "Drugs", new { drugId = drug.Id})" class="btn btn-warning">Update</a></th>
+                <th>Delete</th>
+            </tr>
+        }
+    </tbody>
+</table>

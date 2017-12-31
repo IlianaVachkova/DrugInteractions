@@ -21,9 +21,13 @@ namespace DrugInteractions.Web.Areas.Repr.Controllers
             this.reprDrugsService = reprDrugsService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var serviceModel = await reprDrugsService.AllAsync();
+
+            var viewModel = new DrugListingViewModel { Drugs = serviceModel };
+
+            return View(viewModel);
         }
 
         public async Task<IActionResult> Create()

@@ -1,5 +1,9 @@
-﻿using DrugInteractions.Data;
+﻿using AutoMapper.QueryableExtensions;
+using DrugInteractions.Data;
 using DrugInteractions.Data.Models.Drugs;
+using DrugInteractions.Services.Repr.Model;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DrugInteractions.Services.Repr.Implementations
@@ -11,6 +15,14 @@ namespace DrugInteractions.Services.Repr.Implementations
         public ReprDrugsService(DrugInteractionsDbContext db)
         {
             this.db = db;
+        }
+
+        public async Task<IEnumerable<ReprDrugListingServiceModel>> AllAsync()
+        {
+            return await this.db
+                .Drugs
+                .ProjectTo<ReprDrugListingServiceModel>()
+                .ToListAsync();
         }
 
         public async Task CreateAsync(Drug model)
