@@ -8,7 +8,6 @@
 <div class="row">
     <div class="col-md-4">
         <form method="post">
-            <h4>Update the drug group.</h4>
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id"/>
@@ -19,7 +18,7 @@
                 <input asp-for="Name" class="form-control">
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-            <button type="submit" class="btn btn-default">Update Drug Group</button>
+            <button type="submit" class="btn btn-warning">Update Drug Group</button>
         </form>
     </div>
 </div>

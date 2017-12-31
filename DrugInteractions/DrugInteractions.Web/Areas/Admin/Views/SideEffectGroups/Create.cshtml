@@ -1,6 +1,6 @@
 ﻿@model AddSideEffectGroupFormModel
 @{
-    ViewData["Title"] = "Create Side Effect Group";
+    ViewData["Title"] = "Create a Side Effect Group";
 }
 
 <h2>@ViewData["Title"]</h2>
@@ -8,7 +8,6 @@
 <div class="row">
     <div class="col-md-4">
         <form method="post">
-            <h4>Create a new side effect group.</h4>
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -16,7 +15,7 @@
                 <input asp-for="Name" class="form-control">
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-            <button type="submit" class="btn btn-default">Create Side Effect Group</button>
+            <button type="submit" class="btn btn-success">Create Side Effect Group</button>
         </form>
     </div>
 </div>
