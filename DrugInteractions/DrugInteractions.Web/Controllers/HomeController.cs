@@ -1,32 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using DrugInteractions.Web.Models;
+using DrugInteractions.Web.Models.Home;
+using DrugInteractions.Services;
 
 namespace DrugInteractions.Web.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IDrugService drugService;
+
+        public HomeController(IDrugService drugService)
+        {
+            this.drugService = drugService;
+        }
+
         public IActionResult Index()
         {
             return View();
         }
 
-        public IActionResult About()
+        public async Task<IActionResult> Search(SearchFormModel model)
         {
-            ViewData["Message"] = "Your application description page.";
+            var viewModel = new SearchViewModel
+            {
+                SearchText = model.SearchText,
+                Drugs=await this.drugService.FindAsync(model.SearchText)
+            };
 
-            return View();
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
+            return View(viewModel);
         }
 
         public IActionResult Error()
