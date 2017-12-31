@@ -38,7 +38,7 @@
                 <th>@drug.Brand.Name</th>
                 <th><a href="#" class="btn btn-info">Details</a></th>
                 <th><a href="@Url.Action("Update", "Drugs", new { drugId = drug.Id})" class="btn btn-warning">Update</a></th>
-                <th>Delete</th>
+                <th><a href="@Url.Action("Delete", "Drugs", new { drugId = drug.Id})" class="btn btn-danger">Delete</a></th>
             </tr>
         }
     </tbody>

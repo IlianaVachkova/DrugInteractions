@@ -43,5 +43,12 @@ namespace DrugInteractions.Services.Repr.Implementations
         {
             return await this.db.Drugs.FindAsync(id);
         }
+
+        public async Task DeleteAsync(Drug model)
+        {
+            this.db.Drugs.Remove(model);
+
+            await this.db.SaveChangesAsync();
+        }
     }
 }
