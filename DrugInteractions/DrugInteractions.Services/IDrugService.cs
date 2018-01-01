@@ -6,6 +6,8 @@ namespace DrugInteractions.Services
 {
     public interface IDrugService
     {
-        Task<IEnumerable<DrugListingServiceModel>> FindAsync(string searchText);
+        Task<IEnumerable<DrugListingServiceModel>> FindByNameAsync(string searchText);
+
+        Task<IEnumerable<DrugListingServiceModel>> FindByBrandAsync(string searchText);
     }
 }

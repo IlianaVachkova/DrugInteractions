@@ -17,7 +17,7 @@ namespace DrugInteractions.Services.Implementations
             this.db = db;
         }
 
-        public async Task<IEnumerable<DrugListingServiceModel>> FindAsync(string searchText)
+        public async Task<IEnumerable<DrugListingServiceModel>> FindByNameAsync(string searchText)
         {
             searchText = searchText ?? string.Empty;
 
@@ -25,6 +25,18 @@ namespace DrugInteractions.Services.Implementations
                 .Drugs
                 .OrderByDescending(d => d.Id)
                 .Where(d => d.Name.ToLower().Contains(searchText.ToLower()))
+                .ProjectTo<DrugListingServiceModel>()
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<DrugListingServiceModel>> FindByBrandAsync(string searchText)
+        {
+            searchText = searchText ?? string.Empty;
+
+            return await this.db
+                .Drugs
+                .OrderByDescending(d => d.Id)
+                .Where(d => d.Brand.Name.ToLower().Contains(searchText.ToLower()))
                 .ProjectTo<DrugListingServiceModel>()
                 .ToListAsync();
         }

@@ -30,9 +30,19 @@ namespace DrugInteractions.Web.Controllers
                 SearchText = model.SearchText,
             };
 
-            if (model.SearchDrugBy == SearchDrugByType.SearchDrugByName)
+            switch (model.SearchDrugBy)
             {
-                viewModel.Drugs = await this.drugService.FindAsync(model.SearchText);
+                case SearchDrugByType.SearchDrugByName:
+                    viewModel.Drugs = await this.drugService.FindByNameAsync(model.SearchText);
+                    break;
+                case SearchDrugByType.SearchDrugByBrand:
+                    viewModel.Drugs = await this.drugService.FindByBrandAsync(model.SearchText);
+                    break;
+                case SearchDrugByType.SearchDrugByDrugGroup:
+                    break;
+                case SearchDrugByType.SearchDrugByRepresentative:
+                    break;
+                default: break;
             }
 
             return View(viewModel);
