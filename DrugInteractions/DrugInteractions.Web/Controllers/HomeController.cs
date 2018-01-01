@@ -39,6 +39,7 @@ namespace DrugInteractions.Web.Controllers
                     viewModel.Drugs = await this.drugService.FindByBrandAsync(model.SearchText);
                     break;
                 case SearchDrugByType.SearchDrugByDrugGroup:
+                    viewModel.Drugs = await this.drugService.FindByDrugGroupAsync(model.SearchText);
                     break;
                 case SearchDrugByType.SearchDrugByRepresentative:
                     break;
