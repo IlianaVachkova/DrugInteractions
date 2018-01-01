@@ -11,5 +11,7 @@ namespace DrugInteractions.Services
         Task<IEnumerable<DrugListingServiceModel>> FindByBrandAsync(string searchText);
 
         Task<IEnumerable<DrugListingServiceModel>> FindByDrugGroupAsync(string searchText);
+
+        Task<IEnumerable<DrugListingServiceModel>> FindByRepresentativeAsync(string searchText);
     }
 }

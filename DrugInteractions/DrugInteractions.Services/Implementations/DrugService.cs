@@ -52,5 +52,17 @@ namespace DrugInteractions.Services.Implementations
                 .ProjectTo<DrugListingServiceModel>()
                 .ToListAsync();
         }
+
+        public async Task<IEnumerable<DrugListingServiceModel>> FindByRepresentativeAsync(string searchText)
+        {
+            searchText = searchText ?? string.Empty;
+
+            return await this.db
+                .Drugs
+                .OrderByDescending(d => d.Id)
+                .Where(d => d.Representative.Name.ToLower().Contains(searchText.ToLower()))
+                .ProjectTo<DrugListingServiceModel>()
+                .ToListAsync();
+        }
     }
 }
