@@ -66,29 +66,19 @@
     </a>
 </div>
 
+<br/>
+<br />
+
 @if (User.Identity.IsAuthenticated)
 {
     <div class="row">
         <form asp-action="Search">
-            <!--<div>
-                <input asp-for="SearchDrugByName" type="radio" value="1" name="SearchDrugByName" checked="checked" class="col-md-1">
-                <label asp-for="SearchDrugByName" class="col-md-3"></label>
-                <input asp-for="SearchDrugByBrand" type="radio" value="1" name="SearchDrugByName" class="col-md-1">
-                <label asp-for="SearchDrugByBrand" class="col-md-3"></label>
-                <input asp-for="SearchDrugByDrugGroup" type="radio" value="1" name="SearchDrugByName" class="col-md-1">
-                <label asp-for="SearchDrugByDrugGroup" class="col-md-3"></label>
-                <input asp-for="SearchDrugByRepresentative" type="radio" value="1" name="SearchDrugByName" class="col-md-1">
-                <label asp-for="SearchDrugByRepresentative" class="col-md-3"></label>
-            </div>-->
-            <div class="form-group">
-                <label asp-for="SearchDrugBy"></label>
+            <div class="col-md-6">
+                <input asp-for="SearchText" class="form-control" placeholder="Search drug by..." />
+            </div>
+            <div class="form-group col-md-4">
                 <select asp-for="SearchDrugBy" asp-items="Html.GetEnumSelectList<SearchDrugByType>()" class="form-control"></select>
                 <span asp-validation-for="SearchDrugBy" class="text-danger"></span>
-            </div>
-            <br />
-            <hr />
-            <div class="col-md-6">
-                <input asp-for="SearchText" class="form-control" placeholder="Search..." />
             </div>
             <div class="col-md-2">
                 <input type="submit" class="btn btn-default pull-right" value="Search" />
