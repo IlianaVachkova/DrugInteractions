@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using DrugInteractions.Web.Models;
 using DrugInteractions.Web.Models.Home;
 using DrugInteractions.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DrugInteractions.Web.Controllers
 {
@@ -21,13 +22,18 @@ namespace DrugInteractions.Web.Controllers
             return View();
         }
 
+        [Authorize]
         public async Task<IActionResult> Search(SearchFormModel model)
         {
             var viewModel = new SearchViewModel
             {
                 SearchText = model.SearchText,
-                Drugs=await this.drugService.FindAsync(model.SearchText)
             };
+
+            if (model.SearchDrugBy == SearchDrugByType.SearchDrugByName)
+            {
+                viewModel.Drugs = await this.drugService.FindAsync(model.SearchText);
+            }
 
             return View(viewModel);
         }

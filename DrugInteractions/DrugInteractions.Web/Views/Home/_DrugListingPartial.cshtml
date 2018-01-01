@@ -1,0 +1,8 @@
+﻿@model IEnumerable<DrugListingServiceModel>
+    @foreach (var drug in Model)
+    {
+        <div class="text-center">@drug.Name</div>
+        <div class="text-center">@drug.DrugGroup.Name</div>
+        <div class="text-center">@drug.Brand.Name</div>
+        <div class="text-center">@drug.Representative.Name</div>
+    }
