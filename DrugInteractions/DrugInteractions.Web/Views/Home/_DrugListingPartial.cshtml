@@ -5,13 +5,13 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title text-center">
-                    @drug.Name
+                    @drug?.Name
                 </h3>
             </div>
             <div class="panel-body">
-                <div class="text-center">@drug.DrugGroup.Name</div>
-                <div class="text-center">@drug.Brand.Name</div>
-                <div class="text-center">@drug.Representative.Name</div>
+                <div class="text-center">@drug?.DrugGroup?.Name</div>
+                <div class="text-center">@drug?.Brand?.Name</div>
+                <div class="text-center">@drug?.Representative?.Name</div>
             </div>
         </div>
     </div>
