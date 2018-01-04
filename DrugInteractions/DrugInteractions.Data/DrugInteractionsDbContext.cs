@@ -40,6 +40,11 @@ namespace DrugInteractions.Data
                 .HasForeignKey(eff => eff.AdminId);
 
             builder
+                .Entity<SideEffect>()
+                .HasIndex(seff => seff.Name)
+                .IsUnique();
+
+            builder
                 .Entity<Drug>()
                 .HasOne(d => d.Representative)
                 .WithMany(u => u.Drugs)
@@ -58,10 +63,20 @@ namespace DrugInteractions.Data
                 .HasForeignKey(d => d.BrandId);
 
             builder
+                .Entity<Drug>()
+                .HasIndex(d => d.Name)
+                .IsUnique();
+
+            builder
                 .Entity<Brand>()
                 .HasOne(b => b.Admin)
                 .WithMany(u => u.Brands)
                 .HasForeignKey(b => b.AdminId);
+
+            builder
+                .Entity<Brand>()
+                .HasIndex(b => b.Name)
+                .IsUnique();
 
             builder
                 .Entity<DrugGroup>()
@@ -70,10 +85,20 @@ namespace DrugInteractions.Data
                 .HasForeignKey(dg => dg.AdminId);
 
             builder
+                .Entity<DrugGroup>()
+                .HasIndex(dgr => dgr.Name)
+                .IsUnique();
+
+            builder
                 .Entity<SideEffectGroup>()
                 .HasOne(dg => dg.Admin)
                 .WithMany(u => u.SideEffectGroups)
                 .HasForeignKey(dg => dg.AdminId);
+
+            builder
+                .Entity<SideEffectGroup>()
+                .HasIndex(seffgr => seffgr.Name)
+                .IsUnique();
 
             builder
                 .Entity<DrugSideEffect>()

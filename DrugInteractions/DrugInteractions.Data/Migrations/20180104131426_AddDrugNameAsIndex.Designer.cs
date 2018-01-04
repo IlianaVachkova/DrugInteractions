@@ -12,9 +12,10 @@ using System;
 namespace DrugInteractions.Data.Migrations
 {
     [DbContext(typeof(DrugInteractionsDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180104131426_AddDrugNameAsIndex")]
+    partial class AddDrugNameAsIndex
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -107,9 +108,6 @@ namespace DrugInteractions.Data.Migrations
 
                     b.HasIndex("AdminId");
 
-                    b.HasIndex("Name")
-                        .IsUnique();
-
                     b.ToTable("DrugGroups");
                 });
 
@@ -169,9 +167,6 @@ namespace DrugInteractions.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AdminId");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
 
                     b.ToTable("SideEffectGroups");
                 });

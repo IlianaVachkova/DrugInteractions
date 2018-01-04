@@ -12,9 +12,10 @@ using System;
 namespace DrugInteractions.Data.Migrations
 {
     [DbContext(typeof(DrugInteractionsDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180104133524_AddSideEffectGroupNameAsIndex")]
+    partial class AddSideEffectGroupNameAsIndex
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

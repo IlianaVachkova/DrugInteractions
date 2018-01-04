@@ -20,8 +20,9 @@ namespace DrugInteractions.Web.Areas.Admin.Models.Brands
         [Required]
         [MinLength(BrandWebSiteMinLength)]
         [MaxLength(BrandWebSiteMaxLength)]
-        /*supported formats: google.com, www.google.com, https://www.google.com ,https://www.google.com */
-        [RegularExpression("^http(s)?://([\\w-]+.)+[\\w-]+(/[\\w- ./?%&=])?$", ErrorMessage ="Invalid format for a website.")]
+        [Url]
+        //*supported formats: google.com, www.google.com, https://www.google.com ,https://www.google.com */
+        //[RegularExpression(@"^http(s)?://([\w-]+.)+[\w-]+(/[\w- ./?%&=])?$", ErrorMessage ="Invalid format for a website.")]
         public string WebSite { get; set; }
 
         public User Admin { get; set; }
