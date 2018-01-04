@@ -7,6 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
+using static DrugInteractions.Data.Models.DataConstants;
+
 namespace DrugInteractions.Web.Areas.Repr.Models.Drugs
 {
     public class AddDrugFormModel : IMapFrom<Drug>
@@ -14,9 +16,13 @@ namespace DrugInteractions.Web.Areas.Repr.Models.Drugs
         public int Id { get; set; }
 
         [Required]
+        [MinLength(DrugNameMinLength)]
+        [MaxLength(DrugNameMaxLength)]
         public string Name { get; set; }
 
         [Required]
+        [MinLength(DrugActiveSubstancesMinLength)]
+        [Display(Name= "Active Substances")]
         public string ActiveSubstances { get; set; }
 
         public string Excipients { get; set; }

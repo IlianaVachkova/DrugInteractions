@@ -4,6 +4,8 @@ using DrugInteractions.Data.Models.Users;
 using System;
 using System.ComponentModel.DataAnnotations;
 
+using static DrugInteractions.Data.Models.DataConstants;
+
 namespace DrugInteractions.Web.Areas.Admin.Models.DrugGroups
 {
     public class AddDrugGroupFormModel : IMapFrom<DrugGroup>
@@ -11,6 +13,8 @@ namespace DrugInteractions.Web.Areas.Admin.Models.DrugGroups
         public int Id { get; set; }
 
         [Required]
+        [MinLength(DrugGroupNameMinLength)]
+        [MaxLength(DrugGroupNameMaxLength)]
         public string Name { get; set; }
 
         public User Admin { get; set; }

@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
+using static DrugInteractions.Data.Models.DataConstants;
+
 namespace DrugInteractions.Web.Areas.Repr.Models.SideEffects
 {
     public class AddSideEffectFormModel : IMapFrom<SideEffect>
@@ -13,6 +15,8 @@ namespace DrugInteractions.Web.Areas.Repr.Models.SideEffects
         public int Id { get; set; }
 
         [Required]
+        [MinLength(SideEffectNameMinLength)]
+        [MaxLength(SideEffectNameMaxLength)]
         public string Name { get; set; }
 
         public User Admin { get; set; }
@@ -21,7 +25,7 @@ namespace DrugInteractions.Web.Areas.Repr.Models.SideEffects
 
         public DateTime DateOfAddition { get; set; }
 
-        [Display(Name="Side Effect")]
+        [Display(Name="Side Effect Group")]
         public int SideEffectGroupId { get; set; }
 
         public SideEffectGroup SideEffectGroup { get; set; }

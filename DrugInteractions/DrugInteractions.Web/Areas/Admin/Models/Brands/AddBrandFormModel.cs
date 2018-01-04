@@ -4,6 +4,8 @@ using DrugInteractions.Data.Models.Users;
 using System;
 using System.ComponentModel.DataAnnotations;
 
+using static DrugInteractions.Data.Models.DataConstants;
+
 namespace DrugInteractions.Web.Areas.Admin.Models.Brands
 {
     public class AddBrandFormModel : IMapFrom<Brand>
@@ -11,8 +13,15 @@ namespace DrugInteractions.Web.Areas.Admin.Models.Brands
         public int Id { get; set; }
 
         [Required]
+        [MinLength(BrandNameMinLength)]
+        [MaxLength(BrandNameMaxLength)]
         public string Name { get; set; }
 
+        [Required]
+        [MinLength(BrandWebSiteMinLength)]
+        [MaxLength(BrandWebSiteMaxLength)]
+        /*supported formats: google.com, www.google.com, https://www.google.com ,https://www.google.com */
+        [RegularExpression("^http(s)?://([\\w-]+.)+[\\w-]+(/[\\w- ./?%&=])?$", ErrorMessage ="Invalid format for a website.")]
         public string WebSite { get; set; }
 
         public User Admin { get; set; }
