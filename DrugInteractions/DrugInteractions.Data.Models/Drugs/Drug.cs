@@ -28,6 +28,7 @@ namespace DrugInteractions.Data.Models.Drugs
 
         public string Usage { get; set; }
 
+        [Required]
         public string Description { get; set; }
 
         public User Representative { get; set; }

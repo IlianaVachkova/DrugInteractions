@@ -8,7 +8,7 @@ using System;
 using System.Threading.Tasks;
 using AutoMapper;
 using DrugInteractions.Data.Models.Drugs;
-using DrugInteractions.Web.Infrastructure.Filters;
+using DrugInteractions.Services.Html;
 
 namespace DrugInteractions.Web.Areas.Repr.Controllers
 {
@@ -16,10 +16,13 @@ namespace DrugInteractions.Web.Areas.Repr.Controllers
     {
         private readonly IReprDrugsService reprDrugsService;
 
-        public DrugsController(IReprDrugsService reprDrugsService, UserManager<User> userManager, IDropDownListPopulator populator)
+        private readonly IHtmlService htmlService;
+
+        public DrugsController(IReprDrugsService reprDrugsService, IHtmlService htmlService, UserManager<User> userManager, IDropDownListPopulator populator)
             : base(userManager, populator)
         {
             this.reprDrugsService = reprDrugsService;
+            this.htmlService = htmlService;
         }
 
         public async Task<IActionResult> Index()
@@ -45,12 +48,14 @@ namespace DrugInteractions.Web.Areas.Repr.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(AddDrugFormModel model)
         {
-           if (!ModelState.IsValid)
-           {
-               model.DrugGroups = await this.populator.GetDrugGroups();
-               model.Brands = await this.populator.GetBrands();
-               return View(model);
-           }
+            if (!ModelState.IsValid)
+            {
+                model.DrugGroups = await this.populator.GetDrugGroups();
+                model.Brands = await this.populator.GetBrands();
+                return View(model);
+            }
+
+            model.Description = this.htmlService.Sanitize(model.Description);
 
             var dbModel = Mapper.Map<Drug>(model);
 
@@ -89,6 +94,8 @@ namespace DrugInteractions.Web.Areas.Repr.Controllers
                 model.Brands = await this.populator.GetBrands();
                 return View(model);
             }
+
+            model.Description = this.htmlService.Sanitize(model.Description);
 
             var dbModel = Mapper.Map<Drug>(model);
 

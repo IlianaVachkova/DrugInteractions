@@ -33,7 +33,7 @@
                 <th>@drug.Excipients</th>
                 <th>@drug.PharmaceuticalForm</th>
                 <th>@drug.Usage</th>
-                <th>@drug.Description</th>
+                <th>@Html.Raw(drug.Description)</th>
                 <th>@drug.DrugGroup.Name</th>
                 <th>@drug.Brand.Name</th>
                 <th><a href="#" class="btn btn-info">Details</a></th>

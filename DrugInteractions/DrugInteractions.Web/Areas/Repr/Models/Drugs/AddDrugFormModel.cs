@@ -27,10 +27,12 @@ namespace DrugInteractions.Web.Areas.Repr.Models.Drugs
 
         public string Excipients { get; set; }
 
+        [Display(Name= "Pharmaceutical Form")]
         public PharmaceuticalFormType PharmaceuticalForm { get; set; }
 
         public string Usage { get; set; }
 
+        [Required]
         public string Description { get; set; }
 
         public User Representative { get; set; }
