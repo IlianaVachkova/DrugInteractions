@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using DrugInteractions.Data.Models.IntermediateTables;
 using System.ComponentModel.DataAnnotations;
 
+using static DrugInteractions.Data.Models.DataConstants;
+
 namespace DrugInteractions.Data.Models.Drugs
 {
     public class Drug
@@ -12,9 +14,12 @@ namespace DrugInteractions.Data.Models.Drugs
         public int Id { get; set; }
 
         [Required]
+        [MinLength(DrugNameMinLength)]
+        [MaxLength(DrugNameMaxLength)]
         public string Name { get; set; }
 
         [Required]
+        [MinLength(DrugActiveSubstancesMinLength)]
         public string ActiveSubstances { get; set; }
 
         public string Excipients { get; set; }

@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
+using static DrugInteractions.Data.Models.DataConstants;
+
 namespace DrugInteractions.Data.Models.SideEffects
 {
     public class SideEffectGroup
@@ -10,6 +12,8 @@ namespace DrugInteractions.Data.Models.SideEffects
         public int Id { get; set; }
 
         [Required]
+        [MinLength(SideEffectGroupNameMinLength)]
+        [MaxLength(SideEffectGroupNameMaxLength)]
         public string Name { get; set; }
 
         public User Admin { get; set; }

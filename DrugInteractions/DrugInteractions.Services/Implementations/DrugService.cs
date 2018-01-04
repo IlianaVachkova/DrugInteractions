@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
+using DrugInteractions.Data.Models.Drugs;
 
 namespace DrugInteractions.Services.Implementations
 {

@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
+using static DrugInteractions.Data.Models.DataConstants;
+
 namespace DrugInteractions.Data.Models.SideEffects
 {
     public class SideEffect
@@ -11,6 +13,8 @@ namespace DrugInteractions.Data.Models.SideEffects
         public int Id { get; set; }
 
         [Required]
+        [MinLength(SideEffectNameMinLength)]
+        [MaxLength(SideEffectNameMaxLength)]
         public string Name { get; set; }
 
         public User Admin { get; set; }

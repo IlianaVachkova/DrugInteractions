@@ -12,9 +12,10 @@ using System;
 namespace DrugInteractions.Data.Migrations
 {
     [DbContext(typeof(DrugInteractionsDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180104111204_AddDrugValidation")]
+    partial class AddDrugValidation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -94,8 +95,7 @@ namespace DrugInteractions.Data.Migrations
                     b.Property<DateTime>("DateOfAddition");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50);
+                        .IsRequired();
 
                     b.HasKey("Id");
 
@@ -127,8 +127,7 @@ namespace DrugInteractions.Data.Migrations
                     b.Property<DateTime>("DateOfAddition");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200);
+                        .IsRequired();
 
                     b.Property<int>("SideEffectGroupId");
 
@@ -151,8 +150,7 @@ namespace DrugInteractions.Data.Migrations
                     b.Property<DateTime>("DateOfAddition");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100);
+                        .IsRequired();
 
                     b.HasKey("Id");
 

@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
+using static DrugInteractions.Data.Models.DataConstants;
+
 namespace DrugInteractions.Data.Models.Drugs
 {
     public class DrugGroup
@@ -10,6 +12,8 @@ namespace DrugInteractions.Data.Models.Drugs
         public int Id { get; set; }
 
         [Required]
+        [MinLength(DrugGroupNameMinLength)]
+        [MaxLength(DrugGroupNameMaxLength)]
         public string Name { get; set; }
 
         public User Admin { get; set; }
