@@ -4,6 +4,7 @@ using DrugInteractions.Data.Models.Brands;
 using DrugInteractions.Data.Models.Users;
 using DrugInteractions.Services.Admin;
 using DrugInteractions.Web.Areas.Admin.Models.Brands;
+using DrugInteractions.Web.Infrastructure.Filters;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -36,13 +37,9 @@ namespace DrugInteractions.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateModelState]
         public async Task<IActionResult> Create(AddBrandFormModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-
             var dbModel = Mapper.Map<Brand>(model);
 
             var currentUser = await userManager.GetUserAsync(HttpContext.User);
@@ -69,13 +66,9 @@ namespace DrugInteractions.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateModelState]
         public async Task<IActionResult> Update(AddBrandFormModel model)
         {
-            if (model == null)
-            {
-                return BadRequest();
-            }
-
             var dbModel = Mapper.Map<Brand>(model);
 
             await this.adminBrandsService.UpdateAsync(dbModel);

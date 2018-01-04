@@ -79,9 +79,10 @@ namespace DrugInteractions.Web.Areas.Repr.Controllers
         [HttpPost]
         public async Task<IActionResult> Update(AddSideEffectFormModel model)
         {
-            if (model == null)
+            if (!ModelState.IsValid)
             {
-                return BadRequest();
+                model.SideEffectGroups = await this.populator.GetSideEffectGroups();
+                return View(model);
             }
 
             var dbModel = Mapper.Map<SideEffect>(model);

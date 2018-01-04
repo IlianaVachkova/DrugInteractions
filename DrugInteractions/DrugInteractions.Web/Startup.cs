@@ -10,6 +10,7 @@ using DrugInteractions.Data.Models.Users;
 using AutoMapper;
 using DrugInteractions.Web.Infrastructure.Extensions;
 using DrugInteractions.Web.Infrastructure.Populators;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DrugInteractions.Web
 {
@@ -48,6 +49,11 @@ namespace DrugInteractions.Web
             services.AddTransient<IDropDownListPopulator, DropDownListPopulator>();
 
             services.AddMvc();
+
+            services.AddMvc(options =>
+            {
+                options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -3,6 +3,7 @@ using DrugInteractions.Data.Models.SideEffects;
 using DrugInteractions.Data.Models.Users;
 using DrugInteractions.Services.Admin;
 using DrugInteractions.Web.Areas.Admin.Models.SideEffectGroups;
+using DrugInteractions.Web.Infrastructure.Filters;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -35,13 +36,9 @@ namespace DrugInteractions.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateModelState]
         public async Task<IActionResult> Create(AddSideEffectGroupFormModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-       
             var dbModel = Mapper.Map<SideEffectGroup>(model);
        
             var currentUser = await userManager.GetUserAsync(HttpContext.User);
@@ -68,13 +65,9 @@ namespace DrugInteractions.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateModelState]
         public async Task<IActionResult> Update(AddSideEffectGroupFormModel model)
         {
-            if (model == null)
-            {
-                return BadRequest();
-            }
-
             var dbModel = Mapper.Map<SideEffectGroup>(model);
 
             await this.adminSideEffectGroupsService.UpdateAsync(dbModel);

@@ -8,6 +8,7 @@ using System;
 using System.Threading.Tasks;
 using AutoMapper;
 using DrugInteractions.Data.Models.Drugs;
+using DrugInteractions.Web.Infrastructure.Filters;
 
 namespace DrugInteractions.Web.Areas.Repr.Controllers
 {
@@ -44,12 +45,12 @@ namespace DrugInteractions.Web.Areas.Repr.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(AddDrugFormModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                model.DrugGroups = await this.populator.GetDrugGroups();
-                model.Brands = await this.populator.GetBrands();
-                return View(model);
-            }
+           if (!ModelState.IsValid)
+           {
+               model.DrugGroups = await this.populator.GetDrugGroups();
+               model.Brands = await this.populator.GetBrands();
+               return View(model);
+           }
 
             var dbModel = Mapper.Map<Drug>(model);
 
@@ -82,9 +83,11 @@ namespace DrugInteractions.Web.Areas.Repr.Controllers
         [HttpPost]
         public async Task<IActionResult> Update(AddDrugFormModel model)
         {
-            if (model == null)
+            if (!ModelState.IsValid)
             {
-                return BadRequest();
+                model.DrugGroups = await this.populator.GetDrugGroups();
+                model.Brands = await this.populator.GetBrands();
+                return View(model);
             }
 
             var dbModel = Mapper.Map<Drug>(model);
