@@ -1,0 +1,7 @@
+﻿@model List<DrugListingServiceModel>
+    @foreach (var drug in Model)
+{
+        <div class="col-md-4">
+            @(drug?.Name) produced by @(drug?.Brand?.Name)
+        </div>
+}

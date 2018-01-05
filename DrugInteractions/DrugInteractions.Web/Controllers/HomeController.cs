@@ -50,13 +50,6 @@ namespace DrugInteractions.Web.Controllers
             return View(viewModel);
         }
 
-        public async Task<IActionResult> WeeklyDrugs()
-        {
-            var drugsList = await this.drugService.GetWeeklyDrugs();
-
-            return PartialView("_WeeklyDrugs", drugsList);
-        }
-
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
