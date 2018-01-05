@@ -13,5 +13,7 @@ namespace DrugInteractions.Services
         Task<IEnumerable<DrugListingServiceModel>> FindByDrugGroupAsync(string searchText);
 
         Task<IEnumerable<DrugListingServiceModel>> FindByRepresentativeAsync(string searchText);
+
+        Task<IEnumerable<DrugListingServiceModel>> GetWeeklyDrugs();
     }
 }

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
-using DrugInteractions.Data.Models.Drugs;
+using System;
 
 namespace DrugInteractions.Services.Implementations
 {
@@ -62,6 +62,18 @@ namespace DrugInteractions.Services.Implementations
                 .Drugs
                 .OrderByDescending(d => d.Id)
                 .Where(d => d.Representative.Name.ToLower().Contains(searchText.ToLower()))
+                .ProjectTo<DrugListingServiceModel>()
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<DrugListingServiceModel>> GetWeeklyDrugs()
+        {
+            var dateBeforeWeek = DateTime.UtcNow.AddDays(-7);
+
+            return await this.db
+                .Drugs
+                .OrderByDescending(d => d.Id)
+                .Where(d => d.DateOfAddition >= dateBeforeWeek)
                 .ProjectTo<DrugListingServiceModel>()
                 .ToListAsync();
         }
