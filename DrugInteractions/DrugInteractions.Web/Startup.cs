@@ -43,6 +43,8 @@ namespace DrugInteractions.Web
 
             services.AddDomainServices();
 
+            services.AddRouting(routing => routing.LowercaseUrls = true);
+
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
 

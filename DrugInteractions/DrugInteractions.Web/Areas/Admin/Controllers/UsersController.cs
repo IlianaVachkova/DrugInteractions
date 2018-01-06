@@ -63,5 +63,28 @@ namespace DrugInteractions.Web.Areas.Admin.Controllers
             TempData.AddSuccessMessage($"User {user.UserName} successfully added to {model.Role} role!");
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveFromRole(AddUserToRoleFormModel model)
+        {
+            var roleExists = await this.roleManager.RoleExistsAsync(model.Role);
+            var user = await this.userManager.FindByIdAsync(model.UserId);
+            var userExists = user != null;
+
+            if (!roleExists || !userExists)
+            {
+                ModelState.AddModelError(string.Empty, "Invalid identity details");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            await this.userManager.RemoveFromRoleAsync(user, model.Role);
+
+            TempData.AddSuccessMessage($"User {user.UserName} successfully removed from {model.Role} role!");
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
