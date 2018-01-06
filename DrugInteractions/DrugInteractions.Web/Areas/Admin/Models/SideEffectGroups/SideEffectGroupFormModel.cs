@@ -8,7 +8,7 @@ using static DrugInteractions.Data.Models.DataConstants;
 
 namespace DrugInteractions.Web.Areas.Admin.Models.SideEffectGroups
 {
-    public class AddSideEffectGroupFormModel : IMapFrom<SideEffectGroup>
+    public class SideEffectGroupFormModel : IMapFrom<SideEffectGroup>
     {
         public int Id { get; set; }
 

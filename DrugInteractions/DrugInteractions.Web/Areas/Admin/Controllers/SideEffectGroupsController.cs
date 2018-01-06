@@ -3,6 +3,7 @@ using DrugInteractions.Data.Models.SideEffects;
 using DrugInteractions.Data.Models.Users;
 using DrugInteractions.Services.Admin;
 using DrugInteractions.Web.Areas.Admin.Models.SideEffectGroups;
+using DrugInteractions.Web.Infrastructure.Extensions;
 using DrugInteractions.Web.Infrastructure.Filters;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -37,55 +38,76 @@ namespace DrugInteractions.Web.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateModelState]
-        public async Task<IActionResult> Create(AddSideEffectGroupFormModel model)
+        public async Task<IActionResult> Create(SideEffectGroupFormModel model)
         {
             var dbModel = Mapper.Map<SideEffectGroup>(model);
-       
-            var currentUser = await userManager.GetUserAsync(HttpContext.User);
-            dbModel.Admin = currentUser;
+
+            var userId = this.userManager.GetUserId(User);
+            dbModel.AdminId = userId;
             dbModel.DateOfAddition = DateTime.UtcNow;
-       
-            await this.adminSideEffectGroupsService.CreateAsync(dbModel);
-       
+
+            try
+            {
+                await this.adminSideEffectGroupsService.CreateAsync(dbModel);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, "Side effect group with this name already exists.");
+                return View(model);
+            }
+
+            TempData.AddSuccessMessage($"Side effect group {model.Name} successfully created.");
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Update(int? sideEffectGroupId)
+        public async Task<IActionResult> Update(int sideEffectGroupId)
         {
             var dbModel = await this.adminSideEffectGroupsService.GetByIdAsync(sideEffectGroupId);
 
             if (dbModel == null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
-            var viewModel = Mapper.Map<AddSideEffectGroupFormModel>(dbModel);
+            var viewModel = Mapper.Map<SideEffectGroupFormModel>(dbModel);
 
             return View(viewModel);
         }
 
         [HttpPost]
         [ValidateModelState]
-        public async Task<IActionResult> Update(AddSideEffectGroupFormModel model)
+        public async Task<IActionResult> Update(SideEffectGroupFormModel model)
         {
             var dbModel = Mapper.Map<SideEffectGroup>(model);
 
+            try
+            {
+                await this.adminSideEffectGroupsService.UpdateAsync(dbModel);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, "Side effect group with this name already exists.");
+                return View(model);
+            }
+
             await this.adminSideEffectGroupsService.UpdateAsync(dbModel);
 
+            TempData.AddSuccessMessage($"Side effect group {model.Name} successfully updated.");
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Delete(int? sideEffectGroupId)
+        public async Task<IActionResult> Delete(int sideEffectGroupId)
         {
             var dbModel = await this.adminSideEffectGroupsService.GetByIdAsync(sideEffectGroupId);
 
             if (dbModel == null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
             await this.adminSideEffectGroupsService.DeleteAsync(dbModel);
 
+            TempData.AddSuccessMessage($"Side effect group {dbModel.Name} successfully deleted.");
             return RedirectToAction(nameof(Index));
         }
     }
