@@ -13,5 +13,7 @@ namespace DrugInteractions.Web.Infrastructure.Populators
         Task<IEnumerable<SelectListItem>> GetBrands();
 
         Task<IEnumerable<SelectListItem>> GetSideEffects();
+
+        Task<IEnumerable<SelectListItem>> GetDrugs();
     }
 }

@@ -18,15 +18,18 @@ namespace DrugInteractions.Web.Infrastructure.Populators
 
         private readonly IReprSideEffectsService sideEffectsService;
 
+        private readonly IReprDrugsService drugsService;
+
         private readonly ICacheService cache;
 
-        public DropDownListPopulator(ICacheService cache, IAdminSideEffectGroupsService sideEffectGroups, IAdminBrandsService brandsService, IAdminDrugGroupsService drugGroupsService, IReprSideEffectsService sideEffectsService)
+        public DropDownListPopulator(ICacheService cache, IAdminSideEffectGroupsService sideEffectGroups, IAdminBrandsService brandsService, IAdminDrugGroupsService drugGroupsService, IReprSideEffectsService sideEffectsService, IReprDrugsService drugsService)
         {
             this.cache = cache;
             this.sideEffectGroups = sideEffectGroups;
             this.brandsService = brandsService;
             this.drugGroupsService = drugGroupsService;
             this.sideEffectsService = sideEffectsService;
+            this.drugsService = drugsService;
         }
 
         public async Task<IEnumerable<SelectListItem>> GetSideEffectGroups()
@@ -103,6 +106,25 @@ namespace DrugInteractions.Web.Infrastructure.Populators
                 });
 
             return sideEffects;
+        }
+
+        public async Task<IEnumerable<SelectListItem>> GetDrugs()
+        {
+            var allDrugs = await this.drugsService.AllAsync();
+
+            var drugs = this.cache.Get<IEnumerable<SelectListItem>>("drugs",
+                () =>
+                {
+                    return allDrugs
+                    .Select(d => new SelectListItem
+                    {
+                        Value = d.Id.ToString(),
+                        Text = d.Name
+                    })
+                    .ToList();
+                });
+
+            return drugs;
         }
     }
 }

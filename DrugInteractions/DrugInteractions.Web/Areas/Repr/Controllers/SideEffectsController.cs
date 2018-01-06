@@ -35,7 +35,8 @@ namespace DrugInteractions.Web.Areas.Repr.Controllers
         {
             var model = new SideEffectFormModel
             {
-                SideEffectGroups = await this.populator.GetSideEffectGroups()
+                SideEffectGroups = await this.populator.GetSideEffectGroups(),
+                Drugs = await this.populator.GetDrugs()
             };
 
             return View(model);
@@ -47,6 +48,7 @@ namespace DrugInteractions.Web.Areas.Repr.Controllers
             if (!ModelState.IsValid)
             {
                 model.SideEffectGroups = await this.populator.GetSideEffectGroups();
+                model.Drugs = await this.populator.GetDrugs();
                 return View(model);
             }
 
@@ -59,11 +61,13 @@ namespace DrugInteractions.Web.Areas.Repr.Controllers
             try
             {
                 await this.reprSideEffectService.CreateAsync(dbModel);
+                await this.reprSideEffectService.DrugsInSideEffect(model.DrugIds, dbModel.Id);
             }
             catch (Exception ex)
             {
                 ModelState.AddModelError(string.Empty, "Side effect with this name already exists.");
                 model.SideEffectGroups = await this.populator.GetSideEffectGroups();
+                model.Drugs = await this.populator.GetDrugs();
                 return View(model);
             }
 
@@ -82,7 +86,7 @@ namespace DrugInteractions.Web.Areas.Repr.Controllers
 
             var viewModel = Mapper.Map<SideEffectFormModel>(dbModel);
 
-            viewModel.SideEffectGroups =await this.populator.GetSideEffectGroups();
+            viewModel.SideEffectGroups = await this.populator.GetSideEffectGroups();
 
             return View(viewModel);
         }

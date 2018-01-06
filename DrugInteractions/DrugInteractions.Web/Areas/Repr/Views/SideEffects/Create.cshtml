@@ -20,6 +20,11 @@
                 <select asp-for="SideEffectGroupId" asp-items="Model.SideEffectGroups" class="form-control"></select>
                 <span asp-validation-for="SideEffectGroupId" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="DrugIds"></label>
+                <select asp-for="DrugIds" multiple="multiple" asp-items="Model.Drugs" class="form-control"></select>
+                <span asp-validation-for="DrugIds" class="text-danger"></span>
+            </div>
             <button type="submit" class="btn btn-success">Create Side Effect</button>
         </form>
     </div>

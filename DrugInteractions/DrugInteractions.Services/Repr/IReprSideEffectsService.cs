@@ -16,5 +16,7 @@ namespace DrugInteractions.Services.Repr
         Task<SideEffect> GetByIdAsync(int? id);
 
         Task DeleteAsync(SideEffect model);
+
+        Task DrugsInSideEffect(IEnumerable<int> drugIds, int sideEffectId);
     }
 }
