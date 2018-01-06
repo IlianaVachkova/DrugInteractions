@@ -4,6 +4,7 @@ using DrugInteractions.Data.Models.Brands;
 using DrugInteractions.Data.Models.Users;
 using DrugInteractions.Services.Admin;
 using DrugInteractions.Web.Areas.Admin.Models.Brands;
+using DrugInteractions.Web.Infrastructure.Extensions;
 using DrugInteractions.Web.Infrastructure.Filters;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -38,55 +39,74 @@ namespace DrugInteractions.Web.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateModelState]
-        public async Task<IActionResult> Create(AddBrandFormModel model)
+        public async Task<IActionResult> Create(BrandFormModel model)
         {
             var dbModel = Mapper.Map<Brand>(model);
 
-            var currentUser = await userManager.GetUserAsync(HttpContext.User);
-            dbModel.Admin = currentUser;
+            var userId = this.userManager.GetUserId(User);
+            dbModel.AdminId = userId;
             dbModel.DateOfAddition = DateTime.UtcNow;
 
-            await this.adminBrandsService.CreateAsync(dbModel);
+            try
+            {
+                await this.adminBrandsService.CreateAsync(dbModel);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, "Brand with this name already exists.");
+                return View(model);
+            }
 
+            TempData.AddSuccessMessage($"Brand {model.Name} successfully created.");
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Update(int? brandId)
+        public async Task<IActionResult> Update(int brandId)
         {
             var dbModel = await this.adminBrandsService.GetByIdAsync(brandId);
 
             if (dbModel == null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
-            var viewModel = Mapper.Map<AddBrandFormModel>(dbModel);
+            var viewModel = Mapper.Map<BrandFormModel>(dbModel);
 
             return View(viewModel);
         }
 
         [HttpPost]
         [ValidateModelState]
-        public async Task<IActionResult> Update(AddBrandFormModel model)
+        public async Task<IActionResult> Update(BrandFormModel model)
         {
             var dbModel = Mapper.Map<Brand>(model);
 
-            await this.adminBrandsService.UpdateAsync(dbModel);
+            try
+            {
+                await this.adminBrandsService.UpdateAsync(dbModel);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, "Brand with this name already exists.");
+                return View(model);
+            }
 
+            TempData.AddSuccessMessage($"Brand {model.Name} successfully updated.");
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Delete(int? brandId)
+        public async Task<IActionResult> Delete(int brandId)
         {
             var dbModel = await this.adminBrandsService.GetByIdAsync(brandId);
 
             if (dbModel == null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
             await this.adminBrandsService.DeleteAsync(dbModel);
 
+            TempData.AddSuccessMessage($"Brand {dbModel.Name} successfully deleted.");
             return RedirectToAction(nameof(Index));
         }
     }

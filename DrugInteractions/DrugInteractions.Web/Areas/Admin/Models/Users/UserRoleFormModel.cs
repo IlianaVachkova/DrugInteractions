@@ -2,7 +2,7 @@
 
 namespace DrugInteractions.Web.Areas.Admin.Models.Users
 {
-    public class AddUserToRoleFormModel
+    public class UserRoleFormModel
     {
         [Required]
         public string UserId { get; set; }

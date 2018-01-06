@@ -8,7 +8,7 @@ using static DrugInteractions.Data.Models.DataConstants;
 
 namespace DrugInteractions.Web.Areas.Admin.Models.Brands
 {
-    public class AddBrandFormModel : IMapFrom<Brand>
+    public class BrandFormModel : IMapFrom<Brand>
     {
         public int Id { get; set; }
 

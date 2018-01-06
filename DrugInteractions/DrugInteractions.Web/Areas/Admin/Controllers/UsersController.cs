@@ -42,7 +42,7 @@ namespace DrugInteractions.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddToRole(AddUserToRoleFormModel model)
+        public async Task<IActionResult> AddToRole(UserRoleFormModel model)
         {
             var roleExists = await this.roleManager.RoleExistsAsync(model.Role);
             var user = await this.userManager.FindByIdAsync(model.UserId);
@@ -65,7 +65,7 @@ namespace DrugInteractions.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RemoveFromRole(AddUserToRoleFormModel model)
+        public async Task<IActionResult> RemoveFromRole(UserRoleFormModel model)
         {
             var roleExists = await this.roleManager.RoleExistsAsync(model.Role);
             var user = await this.userManager.FindByIdAsync(model.UserId);
