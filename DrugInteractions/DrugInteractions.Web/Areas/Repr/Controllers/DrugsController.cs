@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using DrugInteractions.Data.Models.Drugs;
 using DrugInteractions.Services.Html;
+using DrugInteractions.Web.Infrastructure.Extensions;
 
 namespace DrugInteractions.Web.Areas.Repr.Controllers
 {
@@ -36,7 +37,7 @@ namespace DrugInteractions.Web.Areas.Repr.Controllers
 
         public async Task<IActionResult> Create()
         {
-            var model = new AddDrugFormModel
+            var model = new DrugFormModel
             {
                 DrugGroups = await this.populator.GetDrugGroups(),
                 Brands = await this.populator.GetBrands()
@@ -46,7 +47,7 @@ namespace DrugInteractions.Web.Areas.Repr.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(AddDrugFormModel model)
+        public async Task<IActionResult> Create(DrugFormModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -59,25 +60,36 @@ namespace DrugInteractions.Web.Areas.Repr.Controllers
 
             var dbModel = Mapper.Map<Drug>(model);
 
-            var currentUser = await userManager.GetUserAsync(HttpContext.User);
-            dbModel.Representative = currentUser;
+            var userId = this.userManager.GetUserId(User);
+            dbModel.RepresentativeId = userId;
             dbModel.DateOfAddition = DateTime.UtcNow;
 
-            await this.reprDrugsService.CreateAsync(dbModel);
+            try
+            {
+                await this.reprDrugsService.CreateAsync(dbModel);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, "Drug with this name already exists.");
+                model.DrugGroups = await this.populator.GetDrugGroups();
+                model.Brands = await this.populator.GetBrands();
+                return View(model);
+            }
 
+            TempData.AddSuccessMessage($"Drug {model.Name} successfully created.");
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Update(int? drugId)
+        public async Task<IActionResult> Update(int drugId)
         {
             var dbModel = await this.reprDrugsService.GetByIdAsync(drugId);
 
             if (dbModel == null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
-            var viewModel = Mapper.Map<AddDrugFormModel>(dbModel);
+            var viewModel = Mapper.Map<DrugFormModel>(dbModel);
 
             viewModel.DrugGroups = await this.populator.GetDrugGroups();
             viewModel.Brands = await this.populator.GetBrands();
@@ -86,7 +98,7 @@ namespace DrugInteractions.Web.Areas.Repr.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(AddDrugFormModel model)
+        public async Task<IActionResult> Update(DrugFormModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -99,22 +111,34 @@ namespace DrugInteractions.Web.Areas.Repr.Controllers
 
             var dbModel = Mapper.Map<Drug>(model);
 
-            await this.reprDrugsService.UpdateAsync(dbModel);
+            try
+            {
+                await this.reprDrugsService.UpdateAsync(dbModel);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, "Drug with this name already exists.");
+                model.DrugGroups = await this.populator.GetDrugGroups();
+                model.Brands = await this.populator.GetBrands();
+                return View(model);
+            }
 
+            TempData.AddSuccessMessage($"Drug {model.Name} successfully updated.");
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Delete(int? drugId)
+        public async Task<IActionResult> Delete(int drugId)
         {
             var dbModel = await this.reprDrugsService.GetByIdAsync(drugId);
 
             if (dbModel == null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
             await this.reprDrugsService.DeleteAsync(dbModel);
 
+            TempData.AddSuccessMessage($"Drug {dbModel.Name} successfully deleted.");
             return RedirectToAction(nameof(Index));
         }
     }

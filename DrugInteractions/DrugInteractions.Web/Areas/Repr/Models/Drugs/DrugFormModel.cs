@@ -11,7 +11,7 @@ using static DrugInteractions.Data.Models.DataConstants;
 
 namespace DrugInteractions.Web.Areas.Repr.Models.Drugs
 {
-    public class AddDrugFormModel : IMapFrom<Drug>
+    public class DrugFormModel : IMapFrom<Drug>
     {
         public int Id { get; set; }
 
