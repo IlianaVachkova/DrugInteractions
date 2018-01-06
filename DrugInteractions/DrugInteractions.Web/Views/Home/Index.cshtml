@@ -32,3 +32,9 @@
         @await Component.InvokeAsync("WeeklyDrugs")
     </div>
 }
+else
+{
+    <div>
+        @await  Component.InvokeAsync("BrandsWithMostDrugs")
+    </div>
+}

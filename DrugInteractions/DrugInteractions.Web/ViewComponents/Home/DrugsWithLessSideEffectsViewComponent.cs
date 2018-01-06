@@ -1,9 +1,11 @@
 ﻿using DrugInteractions.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace DrugInteractions.Web.ViewComponents.Home
 {
+    [Authorize]
     public class DrugsWithLessSideEffectsViewComponent : ViewComponent
     {
         private readonly IDrugService drugService;

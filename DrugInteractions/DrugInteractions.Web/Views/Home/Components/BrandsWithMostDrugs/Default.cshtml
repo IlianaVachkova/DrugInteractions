@@ -1,0 +1,49 @@
+﻿@model List<BrandChartServiceModel>
+
+@{
+    var brandsNames = new List<string>();
+    var brandsDrugsCounts = new List<int>();
+    foreach (var brand in Model)
+    {
+        brandsNames.Add(brand.Name);
+        brandsDrugsCounts.Add(brand.DrugsCount);
+    }
+}
+
+<script>
+        window.onload = function () {
+
+            var chart = new CanvasJS.Chart("chartContainer", {
+                theme: "dark1", // "light1", "light2", "dark1", "dark2"
+                exportEnabled: true,
+                animationEnabled: true,
+                title: {
+                    text: "Chart for top brands with most drugs!",
+                    fontSize: 21
+                },
+                data: [{
+                    type: "pie",
+                    startAngle: 160,
+                    toolTipContent: "<b>{label}</b>: {y}",
+                    indexLabel: "{label} - {y} drugs",
+                    dataPoints: [
+                        { y: @brandsDrugsCounts[0], label: "@brandsNames[0]" },
+                        { y: @brandsDrugsCounts[1], label: "@brandsNames[1]" },
+                        { y: @brandsDrugsCounts[2], label: "@brandsNames[2]" },
+                        { y: @brandsDrugsCounts[3], label: "@brandsNames[3]" },
+                        { y: @brandsDrugsCounts[4], label: "@brandsNames[4]" },
+                        { y: @brandsDrugsCounts[5], label: "@brandsNames[5]" },
+                        { y: @brandsDrugsCounts[6], label: "@brandsNames[6]" },
+                        { y: @brandsDrugsCounts[7], label: "@brandsNames[7]" },
+                        { y: @brandsDrugsCounts[8], label: "@brandsNames[8]" },
+                        { y: @brandsDrugsCounts[9], label: "@brandsNames[9]" },
+                    ]
+                }]
+            });
+            chart.render();
+
+        }
+</script>
+<div id="chartContainer" style="height: 370px; width: 100%;"></div>
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+<script src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>

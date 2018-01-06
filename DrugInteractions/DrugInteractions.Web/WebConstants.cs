@@ -12,5 +12,6 @@
         public const string TempDataErrorMessageKey = "ErrorMessage";
 
         public const int ChartCountOfDrugs = 6;
+        public const int ChartCountOfBrands = 10;
     }
 }

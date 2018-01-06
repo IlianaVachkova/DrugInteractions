@@ -82,7 +82,7 @@ namespace DrugInteractions.Services.Implementations
         {
             var drugsList = await this.db
                 .Drugs
-                .OrderByDescending(d => d.SideEffects.Count)
+                .OrderBy(d => d.SideEffects.Count)
                 .ProjectTo<DrugChartServiceModel>()
                 .Take(drugsCount)
                 .ToListAsync();
