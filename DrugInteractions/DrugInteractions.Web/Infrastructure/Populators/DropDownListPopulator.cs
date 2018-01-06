@@ -1,5 +1,6 @@
 ﻿using DrugInteractions.Services.Admin;
 using DrugInteractions.Services.Caching;
+using DrugInteractions.Services.Repr;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,14 +16,17 @@ namespace DrugInteractions.Web.Infrastructure.Populators
 
         private readonly IAdminDrugGroupsService drugGroupsService;
 
+        private readonly IReprSideEffectsService sideEffectsService;
+
         private readonly ICacheService cache;
 
-        public DropDownListPopulator(ICacheService cache, IAdminSideEffectGroupsService sideEffectGroups, IAdminBrandsService brandsService, IAdminDrugGroupsService drugGroupsService)
+        public DropDownListPopulator(ICacheService cache, IAdminSideEffectGroupsService sideEffectGroups, IAdminBrandsService brandsService, IAdminDrugGroupsService drugGroupsService, IReprSideEffectsService sideEffectsService)
         {
             this.cache = cache;
             this.sideEffectGroups = sideEffectGroups;
             this.brandsService = brandsService;
             this.drugGroupsService = drugGroupsService;
+            this.sideEffectsService = sideEffectsService;
         }
 
         public async Task<IEnumerable<SelectListItem>> GetSideEffectGroups()
@@ -80,6 +84,25 @@ namespace DrugInteractions.Web.Infrastructure.Populators
                 });
 
             return brands;
+        }
+
+        public async Task<IEnumerable<SelectListItem>> GetSideEffects()
+        {
+            var allSideEffects = await this.sideEffectsService.AllAsync();
+
+            var sideEffects = this.cache.Get<IEnumerable<SelectListItem>>("sideEffects",
+                () =>
+                {
+                    return allSideEffects
+                    .Select(seff => new SelectListItem
+                    {
+                        Value = seff.Id.ToString(),
+                        Text = seff.Name
+                    })
+                    .ToList();
+                });
+
+            return sideEffects;
         }
     }
 }

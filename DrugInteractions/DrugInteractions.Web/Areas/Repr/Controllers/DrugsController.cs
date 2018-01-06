@@ -40,7 +40,8 @@ namespace DrugInteractions.Web.Areas.Repr.Controllers
             var model = new DrugFormModel
             {
                 DrugGroups = await this.populator.GetDrugGroups(),
-                Brands = await this.populator.GetBrands()
+                Brands = await this.populator.GetBrands(),
+                SideEffects=await this.populator.GetSideEffects()
             };
 
             return View(model);
@@ -53,6 +54,7 @@ namespace DrugInteractions.Web.Areas.Repr.Controllers
             {
                 model.DrugGroups = await this.populator.GetDrugGroups();
                 model.Brands = await this.populator.GetBrands();
+                model.SideEffects = await this.populator.GetSideEffects();
                 return View(model);
             }
 
@@ -67,12 +69,14 @@ namespace DrugInteractions.Web.Areas.Repr.Controllers
             try
             {
                 await this.reprDrugsService.CreateAsync(dbModel);
+                await this.reprDrugsService.SideEffectsInDrug(model.SideEffectIds, dbModel.Id);
             }
             catch (Exception ex)
             {
                 ModelState.AddModelError(string.Empty, "Drug with this name already exists.");
                 model.DrugGroups = await this.populator.GetDrugGroups();
                 model.Brands = await this.populator.GetBrands();
+                model.SideEffects = await this.populator.GetSideEffects();
                 return View(model);
             }
 
@@ -93,6 +97,7 @@ namespace DrugInteractions.Web.Areas.Repr.Controllers
 
             viewModel.DrugGroups = await this.populator.GetDrugGroups();
             viewModel.Brands = await this.populator.GetBrands();
+            viewModel.SideEffects = await this.populator.GetSideEffects();
 
             return View(viewModel);
         }
@@ -104,6 +109,7 @@ namespace DrugInteractions.Web.Areas.Repr.Controllers
             {
                 model.DrugGroups = await this.populator.GetDrugGroups();
                 model.Brands = await this.populator.GetBrands();
+                model.SideEffects = await this.populator.GetSideEffects();
                 return View(model);
             }
 
@@ -120,6 +126,7 @@ namespace DrugInteractions.Web.Areas.Repr.Controllers
                 ModelState.AddModelError(string.Empty, "Drug with this name already exists.");
                 model.DrugGroups = await this.populator.GetDrugGroups();
                 model.Brands = await this.populator.GetBrands();
+                model.SideEffects = await this.populator.GetSideEffects();
                 return View(model);
             }
 

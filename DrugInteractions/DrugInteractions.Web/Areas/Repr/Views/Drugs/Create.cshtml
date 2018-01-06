@@ -57,6 +57,11 @@
                 <select asp-for="BrandId" asp-items="Model.Brands" class="form-control"></select>
                 <span asp-validation-for="BrandId" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="SideEffectIds"></label>
+                <select asp-for="SideEffectIds" multiple="multiple" asp-items="Model.SideEffects" class="form-control"></select>
+                <span asp-validation-for="SideEffectIds" class="text-danger"></span>
+            </div>
             <button type="submit" class="btn btn-success">Create Drug</button>
         </form>
     </div>

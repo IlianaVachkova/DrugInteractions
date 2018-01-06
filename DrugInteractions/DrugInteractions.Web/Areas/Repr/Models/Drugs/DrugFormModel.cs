@@ -54,5 +54,10 @@ namespace DrugInteractions.Web.Areas.Repr.Models.Drugs
         public IEnumerable<SelectListItem> Brands { get; set; }
 
         public IEnumerable<SelectListItem> DrugGroups { get; set; }
+
+        [Display(Name="Side effects")]
+        public IEnumerable<int> SideEffectIds { get; set; }
+
+        public IEnumerable<SelectListItem> SideEffects { get; set; }
     }
 }

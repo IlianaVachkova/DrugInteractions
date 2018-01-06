@@ -1,6 +1,7 @@
 ﻿using AutoMapper.QueryableExtensions;
 using DrugInteractions.Data;
 using DrugInteractions.Data.Models.Drugs;
+using DrugInteractions.Data.Models.IntermediateTables;
 using DrugInteractions.Services.Repr.Model;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -47,6 +48,16 @@ namespace DrugInteractions.Services.Repr.Implementations
         public async Task DeleteAsync(Drug model)
         {
             this.db.Drugs.Remove(model);
+
+            await this.db.SaveChangesAsync();
+        }
+
+        public async Task SideEffectsInDrug(IEnumerable<int> sideEffectIds, int drugId)
+        {
+            foreach (var seffId in sideEffectIds)
+            {
+                this.db.Add(new DrugSideEffect { DrugId = drugId, SideEffectId = seffId });
+            }
 
             await this.db.SaveChangesAsync();
         }
