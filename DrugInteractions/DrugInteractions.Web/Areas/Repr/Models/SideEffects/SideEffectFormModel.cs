@@ -10,7 +10,7 @@ using static DrugInteractions.Data.Models.DataConstants;
 
 namespace DrugInteractions.Web.Areas.Repr.Models.SideEffects
 {
-    public class AddSideEffectFormModel : IMapFrom<SideEffect>
+    public class SideEffectFormModel : IMapFrom<SideEffect>
     {
         public int Id { get; set; }
 

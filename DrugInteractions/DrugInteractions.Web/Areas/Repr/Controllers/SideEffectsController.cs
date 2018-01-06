@@ -3,6 +3,7 @@ using DrugInteractions.Data.Models.SideEffects;
 using DrugInteractions.Data.Models.Users;
 using DrugInteractions.Services.Repr;
 using DrugInteractions.Web.Areas.Repr.Models.SideEffects;
+using DrugInteractions.Web.Infrastructure.Extensions;
 using DrugInteractions.Web.Infrastructure.Populators;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -32,7 +33,7 @@ namespace DrugInteractions.Web.Areas.Repr.Controllers
 
         public async Task<IActionResult> Create()
         {
-            var model = new AddSideEffectFormModel
+            var model = new SideEffectFormModel
             {
                 SideEffectGroups = await this.populator.GetSideEffectGroups()
             };
@@ -41,7 +42,7 @@ namespace DrugInteractions.Web.Areas.Repr.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(AddSideEffectFormModel model)
+        public async Task<IActionResult> Create(SideEffectFormModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -51,25 +52,35 @@ namespace DrugInteractions.Web.Areas.Repr.Controllers
 
             var dbModel = Mapper.Map<SideEffect>(model);
 
-            var currentUser = await userManager.GetUserAsync(HttpContext.User);
-            dbModel.Admin = currentUser;
+            var userId = this.userManager.GetUserId(User);
+            dbModel.AdminId = userId;
             dbModel.DateOfAddition = DateTime.UtcNow;
 
-            await this.reprSideEffectService.CreateAsync(dbModel);
+            try
+            {
+                await this.reprSideEffectService.CreateAsync(dbModel);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, "Side effect with this name already exists.");
+                model.SideEffectGroups = await this.populator.GetSideEffectGroups();
+                return View(model);
+            }
 
+            TempData.AddSuccessMessage($"Side effect {model.Name} successfully created.");
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Update(int? sideEffectId)
+        public async Task<IActionResult> Update(int sideEffectId)
         {
             var dbModel = await this.reprSideEffectService.GetByIdAsync(sideEffectId);
 
             if (dbModel == null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
-            var viewModel = Mapper.Map<AddSideEffectFormModel>(dbModel);
+            var viewModel = Mapper.Map<SideEffectFormModel>(dbModel);
 
             viewModel.SideEffectGroups =await this.populator.GetSideEffectGroups();
 
@@ -77,7 +88,7 @@ namespace DrugInteractions.Web.Areas.Repr.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(AddSideEffectFormModel model)
+        public async Task<IActionResult> Update(SideEffectFormModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -87,22 +98,33 @@ namespace DrugInteractions.Web.Areas.Repr.Controllers
 
             var dbModel = Mapper.Map<SideEffect>(model);
 
-            await this.reprSideEffectService.UpdateAsync(dbModel);
+            try
+            {
+                await this.reprSideEffectService.UpdateAsync(dbModel);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, "Side effect with this name already exists.");
+                model.SideEffectGroups = await this.populator.GetSideEffectGroups();
+                return View(model);
+            }
 
+            TempData.AddSuccessMessage($"Side effect {model.Name} successfully updated.");
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Delete(int? sideEffectId)
+        public async Task<IActionResult> Delete(int sideEffectId)
         {
             var dbModel = await this.reprSideEffectService.GetByIdAsync(sideEffectId);
 
             if (dbModel == null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
             await this.reprSideEffectService.DeleteAsync(dbModel);
 
+            TempData.AddSuccessMessage($"Side effect {dbModel.Name} successfully deleted.");
             return RedirectToAction(nameof(Index));
         }
     }
