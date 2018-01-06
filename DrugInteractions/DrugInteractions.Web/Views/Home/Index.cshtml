@@ -24,17 +24,17 @@
         </form>
     </div>
 
-    <div>
+    <cache enabled="true" expires-after="@TimeSpan.FromSeconds(4*60*60)">
         @await Component.InvokeAsync("DrugsWithLessSideEffects")
-    </div>
+    </cache>
 
-    <div class="row">
+    <cache enabled="true" expires-after="@TimeSpan.FromSeconds(4*60*60)">
         @await Component.InvokeAsync("WeeklyDrugs")
-    </div>
+    </cache>
 }
 else
 {
-    <div>
-        @await  Component.InvokeAsync("BrandsWithMostDrugs")
-    </div>
+    <cache enabled="true" expires-after="@TimeSpan.FromSeconds(4*60*60)">
+        @await Component.InvokeAsync("BrandsWithMostDrugs")
+    </cache>
 }

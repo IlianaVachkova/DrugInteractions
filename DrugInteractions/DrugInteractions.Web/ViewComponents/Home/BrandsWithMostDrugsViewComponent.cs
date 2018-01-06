@@ -15,7 +15,7 @@ namespace DrugInteractions.Web.ViewComponents.Home
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var brandsList =await this.brandService.GetBrandsWithMostDrugs(WebConstants.ChartCountOfBrands);
+            var brandsList = await this.brandService.GetBrandsWithMostDrugs(WebConstants.ChartCountOfBrands);
 
             return View(brandsList);
         }
