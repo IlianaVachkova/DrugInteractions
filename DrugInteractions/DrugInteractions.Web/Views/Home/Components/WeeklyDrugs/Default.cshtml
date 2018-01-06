@@ -1,7 +1,9 @@
 ﻿@model List<DrugListingServiceModel>
-    @foreach (var drug in Model)
+
+<h2 class="text-center">Weekly Drugs</h2>
+@foreach (var drug in Model)
 {
-        <div class="col-md-4">
-            @(drug?.Name) produced by @(drug?.Brand?.Name)
-        </div>
+    <ul class="col-md-4">
+        <li>@(drug?.Name) produced by @(drug?.Brand?.Name)</li>
+    </ul>
 }

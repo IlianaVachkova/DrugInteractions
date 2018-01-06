@@ -15,5 +15,7 @@ namespace DrugInteractions.Services
         Task<IEnumerable<DrugListingServiceModel>> FindByRepresentativeAsync(string searchText);
 
         Task<IEnumerable<DrugListingServiceModel>> GetWeeklyDrugs();
+
+        Task<IEnumerable<DrugChartServiceModel>> GetDrugsWithLessSideEffects(int drugsCount);
     }
 }

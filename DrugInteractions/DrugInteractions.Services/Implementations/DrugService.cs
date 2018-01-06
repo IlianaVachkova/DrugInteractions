@@ -77,5 +77,25 @@ namespace DrugInteractions.Services.Implementations
                 .ProjectTo<DrugListingServiceModel>()
                 .ToListAsync();
         }
+
+        public async Task<IEnumerable<DrugChartServiceModel>> GetDrugsWithLessSideEffects(int drugsCount)
+        {
+            var drugsList = await this.db
+                .Drugs
+                .OrderByDescending(d => d.SideEffects.Count)
+                .ProjectTo<DrugChartServiceModel>()
+                .Take(drugsCount)
+                .ToListAsync();
+
+            if (drugsList.Count < drugsCount)
+            {
+                while (drugsList.Count < drugsCount)
+                {
+                    drugsList.Add(new DrugChartServiceModel { Name = "default name", SideEffectsCont = 1 });
+                }
+            }
+
+            return drugsList;
+        }
     }
 }
