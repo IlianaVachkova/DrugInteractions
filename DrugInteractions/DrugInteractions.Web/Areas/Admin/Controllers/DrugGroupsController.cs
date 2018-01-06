@@ -3,6 +3,7 @@ using DrugInteractions.Data.Models.Drugs;
 using DrugInteractions.Data.Models.Users;
 using DrugInteractions.Services.Admin;
 using DrugInteractions.Web.Areas.Admin.Models.DrugGroups;
+using DrugInteractions.Web.Infrastructure.Extensions;
 using DrugInteractions.Web.Infrastructure.Filters;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -37,55 +38,74 @@ namespace DrugInteractions.Web.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateModelState]
-        public async Task<IActionResult> Create(AddDrugGroupFormModel model)
+        public async Task<IActionResult> Create(DrugGroupFormModel model)
         {
             var dbModel = Mapper.Map<DrugGroup>(model);
 
-            var currentUser = await userManager.GetUserAsync(HttpContext.User);
-            dbModel.Admin = currentUser;
+            var userId = this.userManager.GetUserId(User);
+            dbModel.AdminId = userId;
             dbModel.DateOfAddition = DateTime.UtcNow;
 
-            await this.adminDrugGroupsService.CreateAsync(dbModel);
+            try
+            {
+                await this.adminDrugGroupsService.CreateAsync(dbModel);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, "Drug group with this name already exists.");
+                return View(model);
+            }
 
+            TempData.AddSuccessMessage($"Drug group {model.Name} successfully created.");
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Update(int? drugGroupId)
+        public async Task<IActionResult> Update(int drugGroupId)
         {
             var dbModel =await this.adminDrugGroupsService.GetByIdAsync(drugGroupId);
 
             if (dbModel == null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
-            var viewModel = Mapper.Map<AddDrugGroupFormModel>(dbModel);
+            var viewModel = Mapper.Map<DrugGroupFormModel>(dbModel);
 
             return View(viewModel);
         }
 
         [HttpPost]
         [ValidateModelState]
-        public async Task<IActionResult> Update(AddDrugGroupFormModel model)
+        public async Task<IActionResult> Update(DrugGroupFormModel model)
         {
             var dbModel = Mapper.Map<DrugGroup>(model);
 
-            await this.adminDrugGroupsService.UpdateAsync(dbModel);
+            try
+            {
+                await this.adminDrugGroupsService.UpdateAsync(dbModel);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, "Drug group with this name already exists.");
+                return View(model);
+            }
 
+            TempData.AddSuccessMessage($"Drug group {model.Name} successfully updated.");
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Delete(int? drugGroupId)
+        public async Task<IActionResult> Delete(int drugGroupId)
         {
             var dbModel = await this.adminDrugGroupsService.GetByIdAsync(drugGroupId);
 
             if (dbModel==null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
             await this.adminDrugGroupsService.DeleteAsync(dbModel);
 
+            TempData.AddSuccessMessage($"Drug group {dbModel.Name} successfully deleted.");
             return RedirectToAction(nameof(Index));
         }
     }

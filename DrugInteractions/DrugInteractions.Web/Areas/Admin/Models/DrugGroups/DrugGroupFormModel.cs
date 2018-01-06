@@ -8,7 +8,7 @@ using static DrugInteractions.Data.Models.DataConstants;
 
 namespace DrugInteractions.Web.Areas.Admin.Models.DrugGroups
 {
-    public class AddDrugGroupFormModel : IMapFrom<DrugGroup>
+    public class DrugGroupFormModel : IMapFrom<DrugGroup>
     {
         public int Id { get; set; }
 
