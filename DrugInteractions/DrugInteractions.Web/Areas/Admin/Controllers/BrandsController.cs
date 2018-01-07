@@ -59,10 +59,7 @@ namespace DrugInteractions.Web.Areas.Admin.Controllers
             }
 
             TempData.AddSuccessMessage($"Brand {model.Name} successfully created.");
-            return RedirectToAction(
-                nameof(HomeController.Index),
-                "Home",
-                new { area = string.Empty });
+            return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Update(int brandId)

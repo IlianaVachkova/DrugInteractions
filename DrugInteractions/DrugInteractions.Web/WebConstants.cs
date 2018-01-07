@@ -13,5 +13,7 @@
 
         public const int ChartCountOfDrugs = 6;
         public const int ChartCountOfBrands = 10;
+
+        public const int StatusCodeNotFound = 404;
     }
 }

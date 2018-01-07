@@ -1,4 +1,6 @@
-﻿using DrugInteractions.Data.Models.Users;
+﻿using DrugInteractions.Data.Models.Brands;
+using DrugInteractions.Data.Models.Users;
+using DrugInteractions.Services.Admin.Models;
 using DrugInteractions.Web.Areas.Admin.Models.Brands;
 using System;
 using System.Collections.Generic;
@@ -19,6 +21,17 @@ namespace DrugInteractions.Test.DataHelpers
             return users;
         }
 
+        internal static Brand GetBrand()
+        {
+            return new Brand
+            {
+                Name = "Brand name",
+                WebSite = "brand website",
+                Admin = GetUser(),
+                AdminId = GetUser().Id
+            };
+        }
+
         internal static BrandFormModel GetBrandFormModel()
         {
             return new BrandFormModel
@@ -28,6 +41,23 @@ namespace DrugInteractions.Test.DataHelpers
                 Admin = GetUser(),
                 AdminId = GetUser().Id
             };
+        }
+
+        internal static IEnumerable<AdminBrandsListingServiceModel> GetBrandsCollection()
+        {
+            var brands = new List<AdminBrandsListingServiceModel>();
+
+            for (int i = 1; i <= 10; i++)
+            {
+                brands.Add(new AdminBrandsListingServiceModel
+                {
+                    Id = i,
+                    Name = "Brand" + i,
+                    WebSite = "website" + i
+                });
+            }
+
+            return brands;
         }
 
         internal static User GetUser()

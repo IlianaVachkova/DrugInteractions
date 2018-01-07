@@ -5,6 +5,7 @@ using DrugInteractions.Test.DataHelpers;
 using DrugInteractions.Test.Mocks;
 using DrugInteractions.Web;
 using DrugInteractions.Web.Areas.Admin.Controllers;
+using DrugInteractions.Web.Areas.Admin.Models.Brands;
 using FluentAssertions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -61,6 +62,32 @@ namespace DrugInteractions.Test.Web.Areas.Admin.Controllers
         }
 
         [Fact]
+        public async Task IndexShouldReturnsViewWithCorrectModel()
+        {
+            // Arrange
+            var brands = DataHelper.GetBrandsCollection();
+            var adminBrandsService = new Mock<IAdminBrandsService>();
+
+            adminBrandsService
+                .Setup(s => s.AllAsync())
+                .ReturnsAsync(brands);
+
+            var controller = new BrandsController(adminBrandsService.Object, null);
+
+            // Act
+            var result = await controller.Index();
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Should().BeOfType<ViewResult>();
+            var viewName = result.As<ViewResult>().ViewName;
+            viewName.Should().BeNull();
+            var model = result.As<ViewResult>().Model;
+            var viewModel = model.As<BrandListingViewModel>();
+            viewModel.Should().NotBeNull();
+        }
+
+        [Fact]
         public void GetCreateShouldReturnView()
         {
             // Arrange
@@ -113,9 +140,6 @@ namespace DrugInteractions.Test.Web.Areas.Admin.Controllers
             result.Should().BeOfType<RedirectToActionResult>();
 
             result.As<RedirectToActionResult>().ActionName.Should().Be("Index");
-            result.As<RedirectToActionResult>().ControllerName.Should().Be("Home");
-            result.As<RedirectToActionResult>().RouteValues.Keys.Should().Contain("area");
-            result.As<RedirectToActionResult>().RouteValues.Values.Should().Contain(string.Empty);
         }
 
         [Fact]
@@ -133,11 +157,179 @@ namespace DrugInteractions.Test.Web.Areas.Admin.Controllers
             var controller = new BrandsController(adminBrandsService.Object, userManager.Object);
 
             // Act
-            var result =await controller.Create(brandFormModel);
+            var result = await controller.Create(brandFormModel);
 
             // Assert
             result.Should().NotBeNull();
             controller.ModelState[string.Empty].Errors[0].ErrorMessage.Should().Be(mockExc.Message);
+        }
+
+        [Fact]
+        public async Task GetUpdateShouldReturnViewWithValidModel()
+        {
+            // Arrange
+            var brandDb = DataHelper.GetBrand();
+            var adminBrandsService = new Mock<IAdminBrandsService>();
+
+            adminBrandsService
+                .Setup(s => s.GetByIdAsync(It.IsAny<int>()))
+                .ReturnsAsync(brandDb);
+
+            var controller = new BrandsController(adminBrandsService.Object, null);
+
+            // Act
+            var result = await controller.Update(brandDb.Id);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Should().BeOfType<ViewResult>();
+            result.As<ViewResult>().ViewName.Should().BeNull();
+            var model = result.As<ViewResult>().Model;
+            model.Should().BeOfType<BrandFormModel>();
+            var formModel = model.As<BrandFormModel>();
+            formModel.Id.Should().Be(brandDb.Id);
+            formModel.Name.Should().Be(brandDb.Name);
+            formModel.WebSite.Should().Be(brandDb.WebSite);
+            formModel.Admin.Name.Should().Be(brandDb.Admin.Name);
+            formModel.AdminId.Should().Be(brandDb.AdminId);
+        }
+
+        [Fact]
+        public async Task GetUpdateReturnsNotFoundWhenDbReturnsNull()
+        {
+            // Arrange
+            var brandId = 1;
+            var adminBrandsService = new Mock<IAdminBrandsService>();
+
+            adminBrandsService
+                .Setup(s => s.GetByIdAsync(It.IsAny<int>()))
+                .ReturnsAsync(() => null);
+
+            var controller = new BrandsController(adminBrandsService.Object, null);
+
+            // Act
+            var result = await controller.Update(brandId);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.As<NotFoundResult>().StatusCode.Should().Be(WebConstants.StatusCodeNotFound);
+        }
+
+        [Fact]
+        public async Task PostUpdateShouldReturnRedirectWithValidModel()
+        {
+            // Arrange
+            var resultBrand = new Brand();
+            string successMessage = null;
+            var brandFormModel = DataHelper.GetBrandFormModel();
+            var adminBrandsService = new Mock<IAdminBrandsService>();
+
+            adminBrandsService
+                .Setup(s => s.UpdateAsync(It.IsAny<Brand>()))
+                .Callback((Brand model) => { resultBrand = model; })
+                .Returns(Task.CompletedTask);
+
+            var tempData = new Mock<ITempDataDictionary>();
+            tempData
+               .SetupSet(t => t[WebConstants.TempDataSuccessMessageKey] = It.IsAny<string>())
+               .Callback((string key, object message) => successMessage = message as string);
+
+            var controller = new BrandsController(adminBrandsService.Object, null);
+            controller.TempData = tempData.Object;
+
+            // Act
+            var result = await controller.Update(brandFormModel);
+
+            // Assert
+            resultBrand.Should().NotBeNull();
+            resultBrand.Name.Should().Be(brandFormModel.Name);
+            resultBrand.WebSite.Should().Be(brandFormModel.WebSite);
+            resultBrand.AdminId.Should().Be(brandFormModel.AdminId);
+
+            successMessage.Should().Be($"Brand {brandFormModel.Name} successfully updated.");
+
+            result.Should().BeOfType<RedirectToActionResult>();
+
+            result.As<RedirectToActionResult>().ActionName.Should().Be("Index");
+        }
+
+        [Fact]
+        public async Task PostUpdateShouldReturnsViewWithCorrectModelWhenDbThrowsException()
+        {
+            // Arrange
+            var brandFormModel = DataHelper.GetBrandFormModel();
+            var adminBrandsService = new Mock<IAdminBrandsService>();
+            var mockExc = new Exception("Brand with this name already exists.");
+
+            adminBrandsService
+                .Setup(s => s.UpdateAsync(It.IsAny<Brand>())).ThrowsAsync(mockExc);
+
+            var controller = new BrandsController(adminBrandsService.Object, null);
+
+            // Act
+            var result = await controller.Update(brandFormModel);
+
+            // Assert
+            result.Should().NotBeNull();
+            controller.ModelState[string.Empty].Errors[0].ErrorMessage.Should().Be(mockExc.Message);
+        }
+
+        [Fact]
+        public async Task DeleteReturnRedirectWithValidId()
+        {
+            // Arrange
+            string successMessage = null;
+            var resultBrand = new Brand();
+            var brandDb = DataHelper.GetBrand();
+            var adminBrandsService = new Mock<IAdminBrandsService>();
+
+            adminBrandsService
+                .Setup(s => s.GetByIdAsync(It.IsAny<int>()))
+                .ReturnsAsync(brandDb);
+
+            adminBrandsService
+                .Setup(s => s.DeleteAsync(It.IsAny<Brand>()))
+                .Callback((Brand model) => { resultBrand = model; })
+                .Returns(Task.CompletedTask);
+
+            var tempData = new Mock<ITempDataDictionary>();
+            tempData
+               .SetupSet(t => t[WebConstants.TempDataSuccessMessageKey] = It.IsAny<string>())
+               .Callback((string key, object message) => successMessage = message as string);
+
+            var controller = new BrandsController(adminBrandsService.Object, null);
+            controller.TempData = tempData.Object;
+
+            // Act
+            var result = await controller.Delete(brandDb.Id);
+
+            // Assert
+            successMessage.Should().Be($"Brand {brandDb.Name} successfully deleted.");
+
+            result.Should().BeOfType<RedirectToActionResult>();
+
+            result.As<RedirectToActionResult>().ActionName.Should().Be("Index");
+        }
+
+        [Fact]
+        public async Task DeleteShouldReturnsNotFoundWhenDbReturnsNull()
+        {
+            // Arrange
+            var brandId = 1;
+            var adminBrandsService = new Mock<IAdminBrandsService>();
+
+            adminBrandsService
+                .Setup(s => s.GetByIdAsync(It.IsAny<int>()))
+                .ReturnsAsync(() => null);
+
+            var controller = new BrandsController(adminBrandsService.Object, null);
+
+            // Act
+            var result = await controller.Delete(brandId);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.As<NotFoundResult>().StatusCode.Should().Be(WebConstants.StatusCodeNotFound);
         }
 
         private Mock<UserManager<User>> GetUserManagerMock()
