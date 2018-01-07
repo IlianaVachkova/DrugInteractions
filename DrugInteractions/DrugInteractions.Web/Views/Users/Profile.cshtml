@@ -1,0 +1,13 @@
+﻿@model UserProfileServiceModel
+@{
+    ViewData["Title"] = $"{Model.UserName} Profile";
+}
+<h2>@ViewData["Title"]</h2>
+<h3>@Model.Name - @Model.BirthDate.ToShortDateString()</h3>
+@if (Model.UserName == User.Identity.Name)
+{
+    <a asp-controller="Manage" asp-action="Index" class="btn btn-default">Edit Profile</a>
+    <br />
+    <br />
+}
+
