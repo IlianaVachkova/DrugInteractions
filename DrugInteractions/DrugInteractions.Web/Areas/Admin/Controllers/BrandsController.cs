@@ -4,6 +4,7 @@ using DrugInteractions.Data.Models.Brands;
 using DrugInteractions.Data.Models.Users;
 using DrugInteractions.Services.Admin;
 using DrugInteractions.Web.Areas.Admin.Models.Brands;
+using DrugInteractions.Web.Controllers;
 using DrugInteractions.Web.Infrastructure.Extensions;
 using DrugInteractions.Web.Infrastructure.Filters;
 using Microsoft.AspNetCore.Identity;
@@ -58,7 +59,10 @@ namespace DrugInteractions.Web.Areas.Admin.Controllers
             }
 
             TempData.AddSuccessMessage($"Brand {model.Name} successfully created.");
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(
+                nameof(HomeController.Index),
+                "Home",
+                new { area = string.Empty });
         }
 
         public async Task<IActionResult> Update(int brandId)

@@ -3,15 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2006
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrugInteractions.Web", "DrugInteractions.Web\DrugInteractions.Web.csproj", "{1A7BD8E6-7BC9-4B59-8E06-1CD861757900}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DrugInteractions.Web", "DrugInteractions.Web\DrugInteractions.Web.csproj", "{1A7BD8E6-7BC9-4B59-8E06-1CD861757900}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrugInteractions.Services", "DrugInteractions.Services\DrugInteractions.Services.csproj", "{E934EC1D-2648-4B83-B280-499399E0864B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DrugInteractions.Services", "DrugInteractions.Services\DrugInteractions.Services.csproj", "{E934EC1D-2648-4B83-B280-499399E0864B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrugInteractions.Common", "DrugInteractions.Common\DrugInteractions.Common.csproj", "{7C9A0A7C-E2DB-43CF-BF44-DDB523E4CBF7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DrugInteractions.Common", "DrugInteractions.Common\DrugInteractions.Common.csproj", "{7C9A0A7C-E2DB-43CF-BF44-DDB523E4CBF7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrugInteractions.Data", "DrugInteractions.Data\DrugInteractions.Data.csproj", "{26BEE8A6-B454-444E-AC64-F8439F3D1DF3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DrugInteractions.Data", "DrugInteractions.Data\DrugInteractions.Data.csproj", "{26BEE8A6-B454-444E-AC64-F8439F3D1DF3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrugInteractions.Data.Models", "DrugInteractions.Data.Models\DrugInteractions.Data.Models.csproj", "{299A7333-B2D8-43C3-A9D6-84F8CEE30B29}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DrugInteractions.Data.Models", "DrugInteractions.Data.Models\DrugInteractions.Data.Models.csproj", "{299A7333-B2D8-43C3-A9D6-84F8CEE30B29}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrugInteractions.Test", "DrugInteractions.Test\DrugInteractions.Test.csproj", "{B8B1EF9E-1664-4ECA-BF45-783237A0412D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{299A7333-B2D8-43C3-A9D6-84F8CEE30B29}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{299A7333-B2D8-43C3-A9D6-84F8CEE30B29}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{299A7333-B2D8-43C3-A9D6-84F8CEE30B29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8B1EF9E-1664-4ECA-BF45-783237A0412D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8B1EF9E-1664-4ECA-BF45-783237A0412D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8B1EF9E-1664-4ECA-BF45-783237A0412D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8B1EF9E-1664-4ECA-BF45-783237A0412D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
