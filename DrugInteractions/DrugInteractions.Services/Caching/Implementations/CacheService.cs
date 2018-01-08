@@ -19,7 +19,7 @@ namespace DrugInteractions.Services.Caching.Implementations
             if (item == null)
             {
                 item = getItemCallback();
-                this.cache.Set(cacheID, item);
+                this.cache.Set(cacheID, item, DateTimeOffset.Now.AddHours(4));
             }
             return item;
         }
