@@ -1,11 +1,11 @@
-﻿using DrugInteractions.Data.Models.Brands;
+﻿using DrugInteractions.Data.Models.Drugs;
 using DrugInteractions.Data.Models.Users;
 using DrugInteractions.Services.Admin;
 using DrugInteractions.Test.DataHelpers;
 using DrugInteractions.Test.Mocks;
 using DrugInteractions.Web;
 using DrugInteractions.Web.Areas.Admin.Controllers;
-using DrugInteractions.Web.Areas.Admin.Models.Brands;
+using DrugInteractions.Web.Areas.Admin.Models.DrugGroups;
 using FluentAssertions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -20,18 +20,18 @@ using Xunit;
 
 namespace DrugInteractions.Test.Web.Areas.Admin.Controllers
 {
-    public class BrandsControllerTests
+    public class DrugGroupsControllerTests
     {
-        public BrandsControllerTests()
+        public DrugGroupsControllerTests()
         {
             Tests.Initialize();
         }
 
         [Fact]
-        public void BrandsControllerShouldBeInTheAdminArea()
+        public void DrugGroupsControllerShouldBeInTheAdminArea()
         {
             // Arrange
-            var controlller = typeof(BrandsController);
+            var controlller = typeof(DrugGroupsController);
 
             // Act
             var areaAttribute = controlller
@@ -45,10 +45,10 @@ namespace DrugInteractions.Test.Web.Areas.Admin.Controllers
         }
 
         [Fact]
-        public void BrandsControllerShouldBeOnlyForAdminUsers()
+        public void DrugGroupsControllerShouldBeOnlyForAdminUsers()
         {
             // Arrange
-            var controller = typeof(BrandsController);
+            var controller = typeof(DrugGroupsController);
 
             // Act
             var areaAttribute = controller
@@ -65,14 +65,14 @@ namespace DrugInteractions.Test.Web.Areas.Admin.Controllers
         public async Task IndexShouldReturnsViewWithCorrectModel()
         {
             // Arrange
-            var brands = DataHelper.GetBrandsCollection();
-            var adminBrandsService = new Mock<IAdminBrandsService>();
+            var brands = DataHelper.GetDrugGroupsCollection();
+            var adminDrugGroupsService = new Mock<IAdminDrugGroupsService>();
 
-            adminBrandsService
+            adminDrugGroupsService
                 .Setup(s => s.AllAsync())
                 .ReturnsAsync(brands);
 
-            var controller = new BrandsController(adminBrandsService.Object, null);
+            var controller = new DrugGroupsController(adminDrugGroupsService.Object, null);
 
             // Act
             var result = await controller.Index();
@@ -83,7 +83,7 @@ namespace DrugInteractions.Test.Web.Areas.Admin.Controllers
             var viewName = result.As<ViewResult>().ViewName;
             viewName.Should().BeNull();
             var model = result.As<ViewResult>().Model;
-            var viewModel = model.As<BrandListingViewModel>();
+            var viewModel = model.As<DrugGroupListingViewModel>();
             viewModel.Should().NotBeNull();
         }
 
@@ -91,7 +91,7 @@ namespace DrugInteractions.Test.Web.Areas.Admin.Controllers
         public void GetCreateShouldReturnView()
         {
             // Arrange
-            var controller = new BrandsController(null, null);
+            var controller = new DrugGroupsController(null, null);
 
             // Act
             var result = controller.Create();
@@ -107,15 +107,15 @@ namespace DrugInteractions.Test.Web.Areas.Admin.Controllers
         public async Task PostCreateShouldReturnRedirectWithValidModel()
         {
             // Arrange
-            var resultBrand = new Brand();
-            var brandFormModel = DataHelper.GetBrandFormModel();
+            var resultDrugGroup = new DrugGroup();
+            var drugGroupFormModel = DataHelper.GetDrugGroupFormModel();
             string successMessage = null;
             var userManager = this.GetUserManagerMock();
-            var adminBrandsService = new Mock<IAdminBrandsService>();
+            var adminDrugGroupsService = new Mock<IAdminDrugGroupsService>();
 
-            adminBrandsService
-                .Setup(s => s.CreateAsync(It.IsAny<Brand>()))
-                .Callback((Brand model) => { resultBrand = model; })
+            adminDrugGroupsService
+                .Setup(s => s.CreateAsync(It.IsAny<DrugGroup>()))
+                .Callback((DrugGroup model) => { resultDrugGroup = model; })
                 .Returns(Task.CompletedTask);
 
             var tempData = new Mock<ITempDataDictionary>();
@@ -123,19 +123,18 @@ namespace DrugInteractions.Test.Web.Areas.Admin.Controllers
                .SetupSet(t => t[WebConstants.TempDataSuccessMessageKey] = It.IsAny<string>())
                .Callback((string key, object message) => successMessage = message as string);
 
-            var controller = new BrandsController(adminBrandsService.Object, userManager.Object);
+            var controller = new DrugGroupsController(adminDrugGroupsService.Object, userManager.Object);
             controller.TempData = tempData.Object;
 
             // Act
-            var result = await controller.Create(brandFormModel);
+            var result = await controller.Create(drugGroupFormModel);
 
             // Assert
-            resultBrand.Should().NotBeNull();
-            resultBrand.Name.Should().Be(brandFormModel.Name);
-            resultBrand.WebSite.Should().Be(brandFormModel.WebSite);
-            resultBrand.AdminId.Should().Be(brandFormModel.AdminId);
+            resultDrugGroup.Should().NotBeNull();
+            resultDrugGroup.Name.Should().Be(drugGroupFormModel.Name);
+            resultDrugGroup.AdminId.Should().Be(drugGroupFormModel.AdminId);
 
-            successMessage.Should().Be($"Brand {brandFormModel.Name} successfully created.");
+            successMessage.Should().Be($"Drug group {drugGroupFormModel.Name} successfully created.");
 
             result.Should().BeOfType<RedirectToActionResult>();
 
@@ -146,69 +145,69 @@ namespace DrugInteractions.Test.Web.Areas.Admin.Controllers
         public async Task PostCreateShouldReturnsViewWithCorrectModelWhenDbThrowsException()
         {
             // Arrange
-            var brandFormModel = DataHelper.GetBrandFormModel();
-            var adminBrandsService = new Mock<IAdminBrandsService>();
+            var drugGroupFormModel = DataHelper.GetDrugGroupFormModel();
+            var adminDrugGroupsService = new Mock<IAdminDrugGroupsService>();
             var userManager = this.GetUserManagerMock();
-            var mockExc = new Exception("Brand with this name already exists.");
+            var mockExc = new Exception("Drug group with this name already exists.");
 
-            adminBrandsService
-                .Setup(s => s.CreateAsync(It.IsAny<Brand>())).ThrowsAsync(mockExc);
+            adminDrugGroupsService
+                .Setup(s => s.CreateAsync(It.IsAny<DrugGroup>())).ThrowsAsync(mockExc);
 
-            var controller = new BrandsController(adminBrandsService.Object, userManager.Object);
+            var controller = new DrugGroupsController(adminDrugGroupsService.Object, userManager.Object);
 
             // Act
-            var result = await controller.Create(brandFormModel);
+            var result = await controller.Create(drugGroupFormModel);
 
             // Assert
             result.Should().NotBeNull();
             controller.ModelState[string.Empty].Errors[0].ErrorMessage.Should().Be(mockExc.Message);
         }
 
+
         [Fact]
         public async Task GetUpdateShouldReturnViewWithValidModel()
         {
             // Arrange
-            var brandDb = DataHelper.GetBrand();
-            var adminBrandsService = new Mock<IAdminBrandsService>();
+            var drugGroupDb = DataHelper.GetDrugGroup();
+            var adminDrugGroupsService = new Mock<IAdminDrugGroupsService>();
 
-            adminBrandsService
+            adminDrugGroupsService
                 .Setup(s => s.GetByIdAsync(It.IsAny<int>()))
-                .ReturnsAsync(brandDb);
+                .ReturnsAsync(drugGroupDb);
 
-            var controller = new BrandsController(adminBrandsService.Object, null);
+            var controller = new DrugGroupsController(adminDrugGroupsService.Object, null);
 
             // Act
-            var result = await controller.Update(brandDb.Id);
+            var result = await controller.Update(drugGroupDb.Id);
 
             // Assert
             result.Should().NotBeNull();
             result.Should().BeOfType<ViewResult>();
             result.As<ViewResult>().ViewName.Should().BeNull();
             var model = result.As<ViewResult>().Model;
-            model.Should().BeOfType<BrandFormModel>();
-            var formModel = model.As<BrandFormModel>();
-            formModel.Id.Should().Be(brandDb.Id);
-            formModel.Name.Should().Be(brandDb.Name);
-            formModel.WebSite.Should().Be(brandDb.WebSite);
-            formModel.Admin.Name.Should().Be(brandDb.Admin.Name);
-            formModel.AdminId.Should().Be(brandDb.AdminId);
+            model.Should().BeOfType<DrugGroupFormModel>();
+            var formModel = model.As<DrugGroupFormModel>();
+            formModel.Id.Should().Be(drugGroupDb.Id);
+            formModel.Name.Should().Be(drugGroupDb.Name);
+            formModel.Admin.Name.Should().Be(drugGroupDb.Admin.Name);
+            formModel.AdminId.Should().Be(drugGroupDb.AdminId);
         }
 
         [Fact]
         public async Task GetUpdateReturnsNotFoundWhenDbReturnsNull()
         {
             // Arrange
-            var brandId = 1;
-            var adminBrandsService = new Mock<IAdminBrandsService>();
+            var drugGroupId = 1;
+            var adminDrugGroupsService = new Mock<IAdminDrugGroupsService>();
 
-            adminBrandsService
+            adminDrugGroupsService
                 .Setup(s => s.GetByIdAsync(It.IsAny<int>()))
                 .ReturnsAsync(() => null);
 
-            var controller = new BrandsController(adminBrandsService.Object, null);
+            var controller = new DrugGroupsController(adminDrugGroupsService.Object, null);
 
             // Act
-            var result = await controller.Update(brandId);
+            var result = await controller.Update(drugGroupId);
 
             // Assert
             result.Should().NotBeNull();
@@ -219,14 +218,14 @@ namespace DrugInteractions.Test.Web.Areas.Admin.Controllers
         public async Task PostUpdateShouldReturnRedirectWithValidModel()
         {
             // Arrange
-            var resultBrand = new Brand();
+            var resultDrugGroup = new DrugGroup();
             string successMessage = null;
-            var brandFormModel = DataHelper.GetBrandFormModel();
-            var adminBrandsService = new Mock<IAdminBrandsService>();
+            var drugGroupFormModel = DataHelper.GetDrugGroupFormModel();
+            var adminDrugGroupsService = new Mock<IAdminDrugGroupsService>();
 
-            adminBrandsService
-                .Setup(s => s.UpdateAsync(It.IsAny<Brand>()))
-                .Callback((Brand model) => { resultBrand = model; })
+            adminDrugGroupsService
+                .Setup(s => s.UpdateAsync(It.IsAny<DrugGroup>()))
+                .Callback((DrugGroup model) => { resultDrugGroup = model; })
                 .Returns(Task.CompletedTask);
 
             var tempData = new Mock<ITempDataDictionary>();
@@ -234,19 +233,18 @@ namespace DrugInteractions.Test.Web.Areas.Admin.Controllers
                .SetupSet(t => t[WebConstants.TempDataSuccessMessageKey] = It.IsAny<string>())
                .Callback((string key, object message) => successMessage = message as string);
 
-            var controller = new BrandsController(adminBrandsService.Object, null);
+            var controller = new DrugGroupsController(adminDrugGroupsService.Object, null);
             controller.TempData = tempData.Object;
 
             // Act
-            var result = await controller.Update(brandFormModel);
+            var result = await controller.Update(drugGroupFormModel);
 
             // Assert
-            resultBrand.Should().NotBeNull();
-            resultBrand.Name.Should().Be(brandFormModel.Name);
-            resultBrand.WebSite.Should().Be(brandFormModel.WebSite);
-            resultBrand.AdminId.Should().Be(brandFormModel.AdminId);
+            resultDrugGroup.Should().NotBeNull();
+            resultDrugGroup.Name.Should().Be(drugGroupFormModel.Name);
+            resultDrugGroup.AdminId.Should().Be(drugGroupFormModel.AdminId);
 
-            successMessage.Should().Be($"Brand {brandFormModel.Name} successfully updated.");
+            successMessage.Should().Be($"Drug group {drugGroupFormModel.Name} successfully updated.");
 
             result.Should().BeOfType<RedirectToActionResult>();
 
@@ -257,17 +255,17 @@ namespace DrugInteractions.Test.Web.Areas.Admin.Controllers
         public async Task PostUpdateShouldReturnsViewWithCorrectModelWhenDbThrowsException()
         {
             // Arrange
-            var brandFormModel = DataHelper.GetBrandFormModel();
-            var adminBrandsService = new Mock<IAdminBrandsService>();
-            var mockExc = new Exception("Brand with this name already exists.");
+            var drugGroupFormModel = DataHelper.GetDrugGroupFormModel();
+            var adminDrugGroupsService = new Mock<IAdminDrugGroupsService>();
+            var mockExc = new Exception("Drug group with this name already exists.");
 
-            adminBrandsService
-                .Setup(s => s.UpdateAsync(It.IsAny<Brand>())).ThrowsAsync(mockExc);
+            adminDrugGroupsService
+                .Setup(s => s.UpdateAsync(It.IsAny<DrugGroup>())).ThrowsAsync(mockExc);
 
-            var controller = new BrandsController(adminBrandsService.Object, null);
+            var controller = new DrugGroupsController(adminDrugGroupsService.Object, null);
 
             // Act
-            var result = await controller.Update(brandFormModel);
+            var result = await controller.Update(drugGroupFormModel);
 
             // Assert
             result.Should().NotBeNull();
@@ -279,17 +277,17 @@ namespace DrugInteractions.Test.Web.Areas.Admin.Controllers
         {
             // Arrange
             string successMessage = null;
-            var resultBrand = new Brand();
-            var brandDb = DataHelper.GetBrand();
-            var adminBrandsService = new Mock<IAdminBrandsService>();
+            var resultDrugGroup = new DrugGroup();
+            var drugGroupDb = DataHelper.GetDrugGroup();
+            var adminDrugGroupsService = new Mock<IAdminDrugGroupsService>();
 
-            adminBrandsService
+            adminDrugGroupsService
                 .Setup(s => s.GetByIdAsync(It.IsAny<int>()))
-                .ReturnsAsync(brandDb);
+                .ReturnsAsync(drugGroupDb);
 
-            adminBrandsService
-                .Setup(s => s.DeleteAsync(It.IsAny<Brand>()))
-                .Callback((Brand model) => { resultBrand = model; })
+            adminDrugGroupsService
+                .Setup(s => s.DeleteAsync(It.IsAny<DrugGroup>()))
+                .Callback((DrugGroup model) => { resultDrugGroup = model; })
                 .Returns(Task.CompletedTask);
 
             var tempData = new Mock<ITempDataDictionary>();
@@ -297,14 +295,14 @@ namespace DrugInteractions.Test.Web.Areas.Admin.Controllers
                .SetupSet(t => t[WebConstants.TempDataSuccessMessageKey] = It.IsAny<string>())
                .Callback((string key, object message) => successMessage = message as string);
 
-            var controller = new BrandsController(adminBrandsService.Object, null);
+            var controller = new DrugGroupsController(adminDrugGroupsService.Object, null);
             controller.TempData = tempData.Object;
 
             // Act
-            var result = await controller.Delete(brandDb.Id);
+            var result = await controller.Delete(drugGroupDb.Id);
 
             // Assert
-            successMessage.Should().Be($"Brand {brandDb.Name} successfully deleted.");
+            successMessage.Should().Be($"Drug group {drugGroupDb.Name} successfully deleted.");
 
             result.Should().BeOfType<RedirectToActionResult>();
 
@@ -315,17 +313,17 @@ namespace DrugInteractions.Test.Web.Areas.Admin.Controllers
         public async Task DeleteShouldReturnsNotFoundWhenDbReturnsNull()
         {
             // Arrange
-            var brandId = 1;
-            var adminBrandsService = new Mock<IAdminBrandsService>();
+            var drugGroupId = 1;
+            var adminDrugGroupsService = new Mock<IAdminDrugGroupsService>();
 
-            adminBrandsService
+            adminDrugGroupsService
                 .Setup(s => s.GetByIdAsync(It.IsAny<int>()))
                 .ReturnsAsync(() => null);
 
-            var controller = new BrandsController(adminBrandsService.Object, null);
+            var controller = new DrugGroupsController(adminDrugGroupsService.Object, null);
 
             // Act
-            var result = await controller.Delete(brandId);
+            var result = await controller.Delete(drugGroupId);
 
             // Assert
             result.Should().NotBeNull();
@@ -334,14 +332,14 @@ namespace DrugInteractions.Test.Web.Areas.Admin.Controllers
 
         private Mock<UserManager<User>> GetUserManagerMock()
         {
-           var userManager = UserManagerMock.New;
-           var user = DataHelper.GetUser();
-           
-           userManager
-               .Setup(u => u.GetUserId(It.IsAny<ClaimsPrincipal>()))
-               .Returns(user.Id);
-           
-           return userManager;
+            var userManager = UserManagerMock.New;
+            var user = DataHelper.GetUser();
+
+            userManager
+                .Setup(u => u.GetUserId(It.IsAny<ClaimsPrincipal>()))
+                .Returns(user.Id);
+
+            return userManager;
         }
     }
 }

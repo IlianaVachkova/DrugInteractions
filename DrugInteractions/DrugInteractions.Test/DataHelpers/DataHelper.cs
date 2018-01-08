@@ -1,10 +1,11 @@
 ﻿using DrugInteractions.Data.Models.Brands;
+using DrugInteractions.Data.Models.Drugs;
 using DrugInteractions.Data.Models.Users;
 using DrugInteractions.Services.Admin.Models;
 using DrugInteractions.Web.Areas.Admin.Models.Brands;
+using DrugInteractions.Web.Areas.Admin.Models.DrugGroups;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace DrugInteractions.Test.DataHelpers
 {
@@ -58,6 +59,42 @@ namespace DrugInteractions.Test.DataHelpers
             }
 
             return brands;
+        }
+
+        internal static DrugGroup GetDrugGroup()
+        {
+            return new DrugGroup
+            {
+                Name="Drug group name",
+                Admin = GetUser(),
+                AdminId = GetUser().Id
+            };
+        }
+
+        internal static DrugGroupFormModel GetDrugGroupFormModel()
+        {
+            return new DrugGroupFormModel
+            {
+                Name = "Drug group name",
+                Admin = GetUser(),
+                AdminId = GetUser().Id
+            };
+        }
+
+        internal static IEnumerable<AdminDrugGroupListingServiceModel> GetDrugGroupsCollection()
+        {
+            var drugGroups = new List<AdminDrugGroupListingServiceModel>();
+
+            for (int i = 1; i <= 10; i++)
+            {
+                drugGroups.Add(new AdminDrugGroupListingServiceModel
+                {
+                    Id=i,
+                    Name="Drug group" + i
+                });
+            }
+
+            return drugGroups;
         }
 
         internal static User GetUser()
