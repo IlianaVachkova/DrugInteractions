@@ -11,7 +11,7 @@ namespace DrugInteractions.Services.Admin
 
         Task<bool> CreateAsync(Brand model);
 
-        Task UpdateAsync(Brand model);
+        Task<bool> UpdateAsync(Brand model);
 
         Task<Brand> GetByIdAsync(int? id);
 

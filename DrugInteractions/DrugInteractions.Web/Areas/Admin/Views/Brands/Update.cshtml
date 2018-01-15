@@ -13,6 +13,7 @@
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="DateOfAddition" />
             <input type="hidden" asp-for="AdminId">
+            <span asp-validation-for="StatusMessage" class="text-danger"></span>
             <div class="form-group">
                 <label asp-for="Name"></label>
                 <input asp-for="Name" class="form-control">

@@ -40,11 +40,18 @@ namespace DrugInteractions.Services.Admin.Implementations
             return true;
         }
 
-        public async Task UpdateAsync(Brand model)
+        public async Task<bool> UpdateAsync(Brand model)
         {
+            if (this.db.Brands.Any(b => b.Name == model.Name))
+            {
+                return false;
+            }
+
             this.db.Brands.Update(model);
 
             await this.db.SaveChangesAsync();
+
+            return true;
         }
 
         public async Task<Brand> GetByIdAsync(int? id)

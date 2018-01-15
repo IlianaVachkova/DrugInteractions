@@ -228,7 +228,7 @@ namespace DrugInteractions.Test.Web.Areas.Admin.Controllers
             adminBrandsService
                 .Setup(s => s.UpdateAsync(It.IsAny<Brand>()))
                 .Callback((Brand model) => { resultBrand = model; })
-                .Returns(Task.CompletedTask);
+                .ReturnsAsync(true);
 
             var tempData = new Mock<ITempDataDictionary>();
             tempData
@@ -255,15 +255,17 @@ namespace DrugInteractions.Test.Web.Areas.Admin.Controllers
         }
 
         [Fact]
-        public async Task PostUpdateShouldReturnsViewWithCorrectModelWhenDbThrowsException()
+        public async Task PostUpdateShouldReturnsViewWithModelWhenInvalidModel()
         {
             // Arrange
+            var resultBrand = new Brand();
             var brandFormModel = DataHelper.GetBrandFormModel();
             var adminBrandsService = new Mock<IAdminBrandsService>();
-            var mockExc = new Exception("Brand with this name already exists.");
 
             adminBrandsService
-                .Setup(s => s.UpdateAsync(It.IsAny<Brand>())).ThrowsAsync(mockExc);
+                .Setup(s => s.UpdateAsync(It.IsAny<Brand>()))
+                .Callback((Brand model) => { resultBrand = model; })
+                .ReturnsAsync(false);
 
             var controller = new BrandsController(adminBrandsService.Object, null);
 
@@ -272,7 +274,7 @@ namespace DrugInteractions.Test.Web.Areas.Admin.Controllers
 
             // Assert
             result.Should().NotBeNull();
-            controller.ModelState[string.Empty].Errors[0].ErrorMessage.Should().Be(mockExc.Message);
+            controller.ModelState[WebConstants.StatusMessage].Errors[0].ErrorMessage.Should().Be(WebConstants.BrandNameExists);
         }
 
         [Fact]

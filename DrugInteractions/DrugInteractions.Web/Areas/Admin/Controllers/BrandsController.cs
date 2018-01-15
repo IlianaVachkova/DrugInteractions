@@ -82,13 +82,11 @@ namespace DrugInteractions.Web.Areas.Admin.Controllers
         {
             var dbModel = Mapper.Map<Brand>(model);
 
-            try
+            var successfulEditing = await this.adminBrandsService.UpdateAsync(dbModel);
+
+            if (!successfulEditing)
             {
-                await this.adminBrandsService.UpdateAsync(dbModel);
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError(string.Empty, "Brand with this name already exists.");
+                ModelState.AddModelError(WebConstants.StatusMessage, WebConstants.BrandNameExists);
                 return View(model);
             }
 
