@@ -5,6 +5,7 @@ using DrugInteractions.Data.Models.IntermediateTables;
 using DrugInteractions.Services.Repr.Model;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DrugInteractions.Services.Repr.Implementations
@@ -26,18 +27,32 @@ namespace DrugInteractions.Services.Repr.Implementations
                 .ToListAsync();
         }
 
-        public async Task CreateAsync(Drug model)
+        public async Task<bool> CreateAsync(Drug model)
         {
+            if (this.db.Drugs.Any(d => d.Name == model.Name))
+            {
+                return false;
+            }
+
             this.db.Add(model);
 
             await this.db.SaveChangesAsync();
+
+            return true;
         }
 
-        public async Task UpdateAsync(Drug model)
+        public async Task<bool> UpdateAsync(Drug model)
         {
+            if (this.db.Drugs.Any(d => d.Name == model.Name && d.Id != model.Id))
+            {
+                return false;
+            }
+
             this.db.Drugs.Update(model);
 
             await this.db.SaveChangesAsync();
+
+            return true;
         }
 
         public async Task<Drug> GetByIdAsync(int id)

@@ -22,12 +22,12 @@ namespace DrugInteractions.Web.Areas.Repr.Models.Drugs
 
         [Required]
         [MinLength(DrugActiveSubstancesMinLength)]
-        [Display(Name= "Active Substances")]
+        [Display(Name = "Active Substances")]
         public string ActiveSubstances { get; set; }
 
         public string Excipients { get; set; }
 
-        [Display(Name= "Pharmaceutical Form")]
+        [Display(Name = "Pharmaceutical Form")]
         public PharmaceuticalFormType PharmaceuticalForm { get; set; }
 
         public string Usage { get; set; }
@@ -55,9 +55,11 @@ namespace DrugInteractions.Web.Areas.Repr.Models.Drugs
 
         public IEnumerable<SelectListItem> DrugGroups { get; set; }
 
-        [Display(Name="Side effects")]
+        [Display(Name = "Side effects")]
         public IEnumerable<int> SideEffectIds { get; set; }
 
         public IEnumerable<SelectListItem> SideEffects { get; set; }
+
+        public string StatusMessage { get; set; }
     }
 }

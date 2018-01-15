@@ -66,19 +66,18 @@ namespace DrugInteractions.Web.Areas.Repr.Controllers
             dbModel.RepresentativeId = userId;
             dbModel.DateOfAddition = DateTime.UtcNow;
 
-            try
+            var successfulCreation = await this.reprDrugsService.CreateAsync(dbModel);
+
+            if (!successfulCreation)
             {
-                await this.reprDrugsService.CreateAsync(dbModel);
-                await this.reprDrugsService.SideEffectsInDrug(model.SideEffectIds, dbModel.Id);
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError(string.Empty, "Drug with this name already exists.");
+                ModelState.AddModelError(WebConstants.StatusMessage, WebConstants.DrugNameExists);
                 model.DrugGroups = await this.populator.GetDrugGroups();
                 model.Brands = await this.populator.GetBrands();
                 model.SideEffects = await this.populator.GetSideEffects();
                 return View(model);
             }
+
+            await this.reprDrugsService.SideEffectsInDrug(model.SideEffectIds, dbModel.Id);
 
             TempData.AddSuccessMessage($"Drug {model.Name} successfully created.");
             return RedirectToAction(nameof(Index));
@@ -117,13 +116,11 @@ namespace DrugInteractions.Web.Areas.Repr.Controllers
 
             var dbModel = Mapper.Map<Drug>(model);
 
-            try
+            var successfulEditing = await this.reprDrugsService.UpdateAsync(dbModel);
+
+            if (!successfulEditing)
             {
-                await this.reprDrugsService.UpdateAsync(dbModel);
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError(string.Empty, "Drug with this name already exists.");
+                ModelState.AddModelError(WebConstants.StatusMessage, WebConstants.DrugNameExists);
                 model.DrugGroups = await this.populator.GetDrugGroups();
                 model.Brands = await this.populator.GetBrands();
                 model.SideEffects = await this.populator.GetSideEffects();

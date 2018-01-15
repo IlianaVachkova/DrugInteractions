@@ -17,6 +17,7 @@
         <form method="post">
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <span asp-validation-for="StatusMessage" class="text-danger"></span>
             <div class="form-group">
                 <label asp-for="Name"></label>
                 <input asp-for="Name" class="form-control">

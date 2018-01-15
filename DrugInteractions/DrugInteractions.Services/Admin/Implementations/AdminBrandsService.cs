@@ -42,7 +42,7 @@ namespace DrugInteractions.Services.Admin.Implementations
 
         public async Task<bool> UpdateAsync(Brand model)
         {
-            if (this.db.Brands.Any(b => b.Name == model.Name && b.Id!=model.Id))
+            if (this.db.Brands.Any(b => b.Name == model.Name && b.Id != model.Id))
             {
                 return false;
             }

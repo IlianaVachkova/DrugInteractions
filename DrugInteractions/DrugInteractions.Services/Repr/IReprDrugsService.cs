@@ -7,9 +7,9 @@ namespace DrugInteractions.Services.Repr
 {
     public interface IReprDrugsService
     {
-        Task CreateAsync(Drug model);
+        Task<bool> CreateAsync(Drug model);
 
-        Task UpdateAsync(Drug model);
+        Task<bool> UpdateAsync(Drug model);
 
         Task<Drug> GetByIdAsync(int id);
 
