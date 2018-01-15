@@ -15,5 +15,8 @@
         public const int ChartCountOfBrands = 10;
 
         public const int StatusCodeNotFound = 404;
+        public const string StatusMessage = "StatusMessage";
+
+        public const string BrandNameExists = "Brand with this name already exists.";
     }
 }

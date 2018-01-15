@@ -9,7 +9,9 @@ using DrugInteractions.Web.Infrastructure.Extensions;
 using DrugInteractions.Web.Infrastructure.Filters;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
+using System.Data.SqlClient;
 using System.Threading.Tasks;
 
 namespace DrugInteractions.Web.Areas.Admin.Controllers
@@ -48,13 +50,11 @@ namespace DrugInteractions.Web.Areas.Admin.Controllers
             dbModel.AdminId = userId;
             dbModel.DateOfAddition = DateTime.UtcNow;
 
-            try
+            var successfulCreation = await this.adminBrandsService.CreateAsync(dbModel);
+
+            if (!successfulCreation)
             {
-                await this.adminBrandsService.CreateAsync(dbModel);
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError(string.Empty, "Brand with this name already exists.");
+                ModelState.AddModelError(WebConstants.StatusMessage, WebConstants.BrandNameExists);
                 return View(model);
             }
 

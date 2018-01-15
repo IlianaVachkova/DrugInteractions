@@ -39,8 +39,8 @@ namespace DrugInteractions.Test.DataHelpers
             {
                 Name = "Brand name",
                 WebSite = "brand website",
-                Admin = GetUser(),
-                AdminId = GetUser().Id
+               // Admin = GetUser(),
+               // AdminId = GetUser().Id
             };
         }
 

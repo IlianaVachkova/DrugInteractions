@@ -116,7 +116,7 @@ namespace DrugInteractions.Test.Web.Areas.Admin.Controllers
             adminBrandsService
                 .Setup(s => s.CreateAsync(It.IsAny<Brand>()))
                 .Callback((Brand model) => { resultBrand = model; })
-                .Returns(Task.CompletedTask);
+                .ReturnsAsync(true);
 
             var tempData = new Mock<ITempDataDictionary>();
             tempData
@@ -133,7 +133,6 @@ namespace DrugInteractions.Test.Web.Areas.Admin.Controllers
             resultBrand.Should().NotBeNull();
             resultBrand.Name.Should().Be(brandFormModel.Name);
             resultBrand.WebSite.Should().Be(brandFormModel.WebSite);
-            resultBrand.AdminId.Should().Be(brandFormModel.AdminId);
 
             successMessage.Should().Be($"Brand {brandFormModel.Name} successfully created.");
 
@@ -143,16 +142,18 @@ namespace DrugInteractions.Test.Web.Areas.Admin.Controllers
         }
 
         [Fact]
-        public async Task PostCreateShouldReturnsViewWithCorrectModelWhenDbThrowsException()
+        public async Task PostCreateShouldReturnsViewWithModelWhenInvalidModel()
         {
             // Arrange
+            var resultBrand = new Brand();
             var brandFormModel = DataHelper.GetBrandFormModel();
             var adminBrandsService = new Mock<IAdminBrandsService>();
             var userManager = this.GetUserManagerMock();
-            var mockExc = new Exception("Brand with this name already exists.");
 
             adminBrandsService
-                .Setup(s => s.CreateAsync(It.IsAny<Brand>())).ThrowsAsync(mockExc);
+                .Setup(s => s.CreateAsync(It.IsAny<Brand>()))
+                .Callback((Brand model) => { resultBrand = model; })
+                .ReturnsAsync(false);
 
             var controller = new BrandsController(adminBrandsService.Object, userManager.Object);
 
@@ -161,7 +162,7 @@ namespace DrugInteractions.Test.Web.Areas.Admin.Controllers
 
             // Assert
             result.Should().NotBeNull();
-            controller.ModelState[string.Empty].Errors[0].ErrorMessage.Should().Be(mockExc.Message);
+            controller.ModelState[WebConstants.StatusMessage].Errors[0].ErrorMessage.Should().Be(WebConstants.BrandNameExists);
         }
 
         [Fact]
@@ -335,11 +336,15 @@ namespace DrugInteractions.Test.Web.Areas.Admin.Controllers
         private Mock<UserManager<User>> GetUserManagerMock()
         {
            var userManager = UserManagerMock.New;
-           var user = DataHelper.GetUser();
-           
-           userManager
+            var users = DataHelper.GetUsersCollection();
+
+            userManager
+               .Setup(u => u.GetUsersInRoleAsync(It.IsAny<string>()))
+               .ReturnsAsync(users);
+
+            userManager
                .Setup(u => u.GetUserId(It.IsAny<ClaimsPrincipal>()))
-               .Returns(user.Id);
+               .Returns(users.FirstOrDefault().Id);
            
            return userManager;
         }

@@ -4,6 +4,7 @@ using DrugInteractions.Data.Models.Brands;
 using DrugInteractions.Services.Admin.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DrugInteractions.Services.Admin.Implementations
@@ -25,11 +26,18 @@ namespace DrugInteractions.Services.Admin.Implementations
                 .ToListAsync();
         }
 
-        public async Task CreateAsync(Brand model)
+        public async Task<bool> CreateAsync(Brand model)
         {
+            if (this.db.Brands.Any(b => b.Name == model.Name))
+            {
+                return false;
+            }
+
             this.db.Add(model);
 
             await this.db.SaveChangesAsync();
+
+            return true;
         }
 
         public async Task UpdateAsync(Brand model)
