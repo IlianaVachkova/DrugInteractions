@@ -9,9 +9,9 @@ namespace DrugInteractions.Services.Admin
     {
         Task<IEnumerable<AdminSideEffectGroupsListingServiceModel>> AllAsync();
 
-        Task CreateAsync(SideEffectGroup model);
+        Task<bool> CreateAsync(SideEffectGroup model);
 
-        Task UpdateAsync(SideEffectGroup model);
+        Task<bool> UpdateAsync(SideEffectGroup model);
 
         Task<SideEffectGroup> GetByIdAsync(int id);
 

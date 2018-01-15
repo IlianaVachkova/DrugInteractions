@@ -46,13 +46,11 @@ namespace DrugInteractions.Web.Areas.Admin.Controllers
             dbModel.AdminId = userId;
             dbModel.DateOfAddition = DateTime.UtcNow;
 
-            try
+            var successfulCreation = await this.adminSideEffectGroupsService.CreateAsync(dbModel);
+
+            if (!successfulCreation)
             {
-                await this.adminSideEffectGroupsService.CreateAsync(dbModel);
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError(string.Empty, "Side effect group with this name already exists.");
+                ModelState.AddModelError(WebConstants.StatusMessage, WebConstants.SideEffectGroupNameExists);
                 return View(model);
             }
 
@@ -80,17 +78,13 @@ namespace DrugInteractions.Web.Areas.Admin.Controllers
         {
             var dbModel = Mapper.Map<SideEffectGroup>(model);
 
-            try
+            var successfulEditing = await this.adminSideEffectGroupsService.UpdateAsync(dbModel);
+
+            if (!successfulEditing)
             {
-                await this.adminSideEffectGroupsService.UpdateAsync(dbModel);
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError(string.Empty, "Side effect group with this name already exists.");
+                ModelState.AddModelError(WebConstants.StatusMessage, WebConstants.SideEffectGroupNameExists);
                 return View(model);
             }
-
-            await this.adminSideEffectGroupsService.UpdateAsync(dbModel);
 
             TempData.AddSuccessMessage($"Side effect group {model.Name} successfully updated.");
             return RedirectToAction(nameof(Index));

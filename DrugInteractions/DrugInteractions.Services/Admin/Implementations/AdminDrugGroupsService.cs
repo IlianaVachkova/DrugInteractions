@@ -42,7 +42,7 @@ namespace DrugInteractions.Services.Admin.Implementations
 
         public async Task<bool> UpdateAsync(DrugGroup model)
         {
-            if (this.db.DrugGroups.Any(dgr => dgr.Name == model.Name))
+            if (this.db.DrugGroups.Any(dgr => dgr.Name == model.Name && dgr.Id != model.Id))
             {
                 return false;
             }
