@@ -4,6 +4,7 @@ using DrugInteractions.Data.Models.Drugs;
 using DrugInteractions.Services.Admin.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DrugInteractions.Services.Admin.Implementations
@@ -25,21 +26,35 @@ namespace DrugInteractions.Services.Admin.Implementations
                 .ToListAsync();
         }
 
-        public async Task CreateAsync(DrugGroup model)
+        public async Task<bool> CreateAsync(DrugGroup model)
         {
+            if (this.db.DrugGroups.Any(dgr => dgr.Name == model.Name))
+            {
+                return false;
+            }
+
             this.db.Add(model);
 
             await this.db.SaveChangesAsync();
+
+            return true;
         }
 
-        public async Task UpdateAsync(DrugGroup model)
+        public async Task<bool> UpdateAsync(DrugGroup model)
         {
+            if (this.db.DrugGroups.Any(dgr => dgr.Name == model.Name))
+            {
+                return false;
+            }
+
             this.db.DrugGroups.Update(model);
 
             await this.db.SaveChangesAsync();
+
+            return true;
         }
 
-        public async Task<DrugGroup> GetByIdAsync(int? id)
+        public async Task<DrugGroup> GetByIdAsync(int id)
         {
             return await this.db.DrugGroups.FindAsync(id);
         }

@@ -46,13 +46,11 @@ namespace DrugInteractions.Web.Areas.Admin.Controllers
             dbModel.AdminId = userId;
             dbModel.DateOfAddition = DateTime.UtcNow;
 
-            try
+            var successfulCreation = await this.adminDrugGroupsService.CreateAsync(dbModel);
+
+            if (!successfulCreation)
             {
-                await this.adminDrugGroupsService.CreateAsync(dbModel);
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError(string.Empty, "Drug group with this name already exists.");
+                ModelState.AddModelError(WebConstants.StatusMessage, WebConstants.DrugGroupNameExists);
                 return View(model);
             }
 
@@ -80,13 +78,11 @@ namespace DrugInteractions.Web.Areas.Admin.Controllers
         {
             var dbModel = Mapper.Map<DrugGroup>(model);
 
-            try
+            var successfulEditing = await this.adminDrugGroupsService.UpdateAsync(dbModel);
+
+            if (!successfulEditing)
             {
-                await this.adminDrugGroupsService.UpdateAsync(dbModel);
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError(string.Empty, "Drug group with this name already exists.");
+                ModelState.AddModelError(WebConstants.StatusMessage, WebConstants.DrugGroupNameExists);
                 return View(model);
             }
 

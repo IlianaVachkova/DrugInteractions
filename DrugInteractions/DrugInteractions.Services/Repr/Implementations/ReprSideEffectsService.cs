@@ -40,7 +40,7 @@ namespace DrugInteractions.Services.Repr.Implementations
             await this.db.SaveChangesAsync();
         }
 
-        public async Task<SideEffect> GetByIdAsync(int? id)
+        public async Task<SideEffect> GetByIdAsync(int id)
         {
             return await this.db.SideEffects.FindAsync(id);
         }

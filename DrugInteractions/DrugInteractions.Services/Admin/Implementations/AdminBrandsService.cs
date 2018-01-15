@@ -54,7 +54,7 @@ namespace DrugInteractions.Services.Admin.Implementations
             return true;
         }
 
-        public async Task<Brand> GetByIdAsync(int? id)
+        public async Task<Brand> GetByIdAsync(int id)
         {
             return await this.db.Brands.FindAsync(id);
         }

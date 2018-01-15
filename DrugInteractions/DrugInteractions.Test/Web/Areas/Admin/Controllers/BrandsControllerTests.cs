@@ -142,7 +142,7 @@ namespace DrugInteractions.Test.Web.Areas.Admin.Controllers
         }
 
         [Fact]
-        public async Task PostCreateShouldReturnsViewWithModelWhenInvalidModel()
+        public async Task PostCreateShouldReturnsViewWithModelWhenModelNameExists()
         {
             // Arrange
             var resultBrand = new Brand();
@@ -255,7 +255,7 @@ namespace DrugInteractions.Test.Web.Areas.Admin.Controllers
         }
 
         [Fact]
-        public async Task PostUpdateShouldReturnsViewWithModelWhenInvalidModel()
+        public async Task PostUpdateShouldReturnsViewWithModelWhenModelNameExists()
         {
             // Arrange
             var resultBrand = new Brand();

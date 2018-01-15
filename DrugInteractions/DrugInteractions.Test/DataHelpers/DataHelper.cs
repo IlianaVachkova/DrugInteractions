@@ -74,8 +74,6 @@ namespace DrugInteractions.Test.DataHelpers
             return new DrugGroupFormModel
             {
                 Name = "Drug group name",
-                Admin = GetUser(),
-                AdminId = GetUser().Id
             };
         }
 

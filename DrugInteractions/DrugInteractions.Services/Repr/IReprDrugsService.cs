@@ -11,7 +11,7 @@ namespace DrugInteractions.Services.Repr
 
         Task UpdateAsync(Drug model);
 
-        Task<Drug> GetByIdAsync(int? id);
+        Task<Drug> GetByIdAsync(int id);
 
         Task<IEnumerable<ReprDrugListingServiceModel>> AllAsync();
 

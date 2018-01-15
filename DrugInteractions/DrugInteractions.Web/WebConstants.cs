@@ -18,5 +18,6 @@
         public const string StatusMessage = "StatusMessage";
 
         public const string BrandNameExists = "Brand with this name already exists.";
+        public const string DrugGroupNameExists = "Drug group with this name already exists.";
     }
 }

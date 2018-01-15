@@ -13,7 +13,7 @@ namespace DrugInteractions.Services.Admin
 
         Task<bool> UpdateAsync(Brand model);
 
-        Task<Brand> GetByIdAsync(int? id);
+        Task<Brand> GetByIdAsync(int id);
 
         Task DeleteAsync(Brand model);
     }

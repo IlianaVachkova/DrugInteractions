@@ -22,5 +22,7 @@ namespace DrugInteractions.Web.Areas.Admin.Models.DrugGroups
         public string AdminId { get; set; }
 
         public DateTime DateOfAddition { get; set; }
+
+        public string StatusMessage { get; set; }
     }
 }

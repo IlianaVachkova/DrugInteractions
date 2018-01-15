@@ -116,7 +116,7 @@ namespace DrugInteractions.Test.Web.Areas.Admin.Controllers
             adminDrugGroupsService
                 .Setup(s => s.CreateAsync(It.IsAny<DrugGroup>()))
                 .Callback((DrugGroup model) => { resultDrugGroup = model; })
-                .Returns(Task.CompletedTask);
+                .ReturnsAsync(true);
 
             var tempData = new Mock<ITempDataDictionary>();
             tempData
@@ -132,7 +132,6 @@ namespace DrugInteractions.Test.Web.Areas.Admin.Controllers
             // Assert
             resultDrugGroup.Should().NotBeNull();
             resultDrugGroup.Name.Should().Be(drugGroupFormModel.Name);
-            resultDrugGroup.AdminId.Should().Be(drugGroupFormModel.AdminId);
 
             successMessage.Should().Be($"Drug group {drugGroupFormModel.Name} successfully created.");
 
@@ -142,16 +141,18 @@ namespace DrugInteractions.Test.Web.Areas.Admin.Controllers
         }
 
         [Fact]
-        public async Task PostCreateShouldReturnsViewWithCorrectModelWhenDbThrowsException()
+        public async Task PostCreateShouldReturnsViewWithModelWhenModelNameExists()
         {
             // Arrange
+            var resultDrugGroup = new DrugGroup();
             var drugGroupFormModel = DataHelper.GetDrugGroupFormModel();
             var adminDrugGroupsService = new Mock<IAdminDrugGroupsService>();
             var userManager = this.GetUserManagerMock();
-            var mockExc = new Exception("Drug group with this name already exists.");
 
             adminDrugGroupsService
-                .Setup(s => s.CreateAsync(It.IsAny<DrugGroup>())).ThrowsAsync(mockExc);
+                .Setup(s => s.CreateAsync(It.IsAny<DrugGroup>()))
+                .Callback((DrugGroup model) => { resultDrugGroup = model; })
+                .ReturnsAsync(false);
 
             var controller = new DrugGroupsController(adminDrugGroupsService.Object, userManager.Object);
 
@@ -160,7 +161,7 @@ namespace DrugInteractions.Test.Web.Areas.Admin.Controllers
 
             // Assert
             result.Should().NotBeNull();
-            controller.ModelState[string.Empty].Errors[0].ErrorMessage.Should().Be(mockExc.Message);
+            controller.ModelState[WebConstants.StatusMessage].Errors[0].ErrorMessage.Should().Be(WebConstants.DrugGroupNameExists);
         }
 
 
@@ -226,7 +227,7 @@ namespace DrugInteractions.Test.Web.Areas.Admin.Controllers
             adminDrugGroupsService
                 .Setup(s => s.UpdateAsync(It.IsAny<DrugGroup>()))
                 .Callback((DrugGroup model) => { resultDrugGroup = model; })
-                .Returns(Task.CompletedTask);
+                .ReturnsAsync(true);
 
             var tempData = new Mock<ITempDataDictionary>();
             tempData
@@ -252,15 +253,17 @@ namespace DrugInteractions.Test.Web.Areas.Admin.Controllers
         }
 
         [Fact]
-        public async Task PostUpdateShouldReturnsViewWithCorrectModelWhenDbThrowsException()
+        public async Task PostUpdateShouldReturnsViewWithModelWhenModelNameExists()
         {
             // Arrange
+            var resultDrugGroup = new DrugGroup();
             var drugGroupFormModel = DataHelper.GetDrugGroupFormModel();
             var adminDrugGroupsService = new Mock<IAdminDrugGroupsService>();
-            var mockExc = new Exception("Drug group with this name already exists.");
 
             adminDrugGroupsService
-                .Setup(s => s.UpdateAsync(It.IsAny<DrugGroup>())).ThrowsAsync(mockExc);
+                .Setup(s => s.UpdateAsync(It.IsAny<DrugGroup>()))
+                .Callback((DrugGroup model) => { resultDrugGroup = model; })
+                .ReturnsAsync(false);
 
             var controller = new DrugGroupsController(adminDrugGroupsService.Object, null);
 
@@ -269,7 +272,7 @@ namespace DrugInteractions.Test.Web.Areas.Admin.Controllers
 
             // Assert
             result.Should().NotBeNull();
-            controller.ModelState[string.Empty].Errors[0].ErrorMessage.Should().Be(mockExc.Message);
+            controller.ModelState[WebConstants.StatusMessage].Errors[0].ErrorMessage.Should().Be(WebConstants.DrugGroupNameExists);
         }
 
         [Fact]
@@ -333,11 +336,15 @@ namespace DrugInteractions.Test.Web.Areas.Admin.Controllers
         private Mock<UserManager<User>> GetUserManagerMock()
         {
             var userManager = UserManagerMock.New;
-            var user = DataHelper.GetUser();
+            var users = DataHelper.GetUsersCollection();
 
             userManager
-                .Setup(u => u.GetUserId(It.IsAny<ClaimsPrincipal>()))
-                .Returns(user.Id);
+               .Setup(u => u.GetUsersInRoleAsync(It.IsAny<string>()))
+               .ReturnsAsync(users);
+
+            userManager
+               .Setup(u => u.GetUserId(It.IsAny<ClaimsPrincipal>()))
+               .Returns(users.FirstOrDefault().Id);
 
             return userManager;
         }

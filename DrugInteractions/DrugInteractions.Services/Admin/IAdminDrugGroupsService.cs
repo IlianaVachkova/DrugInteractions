@@ -9,12 +9,12 @@ namespace DrugInteractions.Services.Admin
     {
         Task<IEnumerable<AdminDrugGroupListingServiceModel>> AllAsync();
 
-        Task CreateAsync(DrugGroup model);
+        Task<bool> CreateAsync(DrugGroup model);
 
-        Task UpdateAsync(DrugGroup model);
+        Task<bool> UpdateAsync(DrugGroup model);
 
         Task DeleteAsync(DrugGroup model);
 
-        Task<DrugGroup> GetByIdAsync(int? id);
+        Task<DrugGroup> GetByIdAsync(int id);
     }
 }
