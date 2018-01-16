@@ -8,6 +8,7 @@ using DrugInteractions.Web.Infrastructure.Populators;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DrugInteractions.Web.Areas.Repr.Controllers
@@ -58,17 +59,19 @@ namespace DrugInteractions.Web.Areas.Repr.Controllers
             dbModel.AdminId = userId;
             dbModel.DateOfAddition = DateTime.UtcNow;
 
-            try
+            var successfulCreation = await this.reprSideEffectService.CreateAsync(dbModel);
+
+            if (!successfulCreation)
             {
-                await this.reprSideEffectService.CreateAsync(dbModel);
-                await this.reprSideEffectService.DrugsInSideEffect(model.DrugIds, dbModel.Id);
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError(string.Empty, "Side effect with this name already exists.");
+                ModelState.AddModelError(WebConstants.StatusMessage, WebConstants.SideEffectNameExists);
                 model.SideEffectGroups = await this.populator.GetSideEffectGroups();
                 model.Drugs = await this.populator.GetDrugs();
                 return View(model);
+            }
+
+            if (model.DrugIds != null)
+            {
+                await this.reprSideEffectService.DrugsInSideEffect(model.DrugIds, dbModel.Id);
             }
 
             TempData.AddSuccessMessage($"Side effect {model.Name} successfully created.");
@@ -102,13 +105,11 @@ namespace DrugInteractions.Web.Areas.Repr.Controllers
 
             var dbModel = Mapper.Map<SideEffect>(model);
 
-            try
+            var successfulEditing = await this.reprSideEffectService.UpdateAsync(dbModel);
+
+            if (!successfulEditing)
             {
-                await this.reprSideEffectService.UpdateAsync(dbModel);
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError(string.Empty, "Side effect with this name already exists.");
+                ModelState.AddModelError(WebConstants.StatusMessage, WebConstants.SideEffectNameExists);
                 model.SideEffectGroups = await this.populator.GetSideEffectGroups();
                 return View(model);
             }

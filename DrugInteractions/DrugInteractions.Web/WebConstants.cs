@@ -21,5 +21,6 @@
         public const string DrugGroupNameExists = "Drug group with this name already exists.";
         public const string SideEffectGroupNameExists = "Side effect group with this name already exists.";
         public const string DrugNameExists = "Drug with this name already exists.";
+        public const string SideEffectNameExists = "Side effect with this name already exists.";
     }
 }

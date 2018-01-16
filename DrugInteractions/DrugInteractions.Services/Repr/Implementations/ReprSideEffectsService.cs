@@ -5,6 +5,7 @@ using DrugInteractions.Data.Models.SideEffects;
 using DrugInteractions.Services.Repr.Model;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DrugInteractions.Services.Repr.Implementations
@@ -26,18 +27,32 @@ namespace DrugInteractions.Services.Repr.Implementations
                 .ToListAsync();
         }
 
-        public async Task CreateAsync(SideEffect model)
+        public async Task<bool> CreateAsync(SideEffect model)
         {
+            if (this.db.SideEffects.Any(seff => seff.Name == model.Name))
+            {
+                return false;
+            }
+
             this.db.Add(model);
 
             await this.db.SaveChangesAsync();
+
+            return true;
         }
 
-        public async Task UpdateAsync(SideEffect model)
+        public async Task<bool> UpdateAsync(SideEffect model)
         {
+            if (this.db.SideEffects.Any(seff => seff.Name == model.Name && seff.Id != model.Id))
+            {
+                return false;
+            }
+
             this.db.SideEffects.Update(model);
 
             await this.db.SaveChangesAsync();
+
+            return true;
         }
 
         public async Task<SideEffect> GetByIdAsync(int id)
@@ -52,14 +67,17 @@ namespace DrugInteractions.Services.Repr.Implementations
             await this.db.SaveChangesAsync();
         }
 
-        public async Task DrugsInSideEffect(IEnumerable<int> drugIds, int sideEffectId)
+        public async Task DrugsInSideEffect(IEnumerable<int?> drugIds, int sideEffectId)
         {
-            foreach (var dId in drugIds)
+            if (drugIds != null)
             {
-                this.db.Add(new DrugSideEffect { DrugId = dId, SideEffectId = sideEffectId });
-            }
+                foreach (var dId in drugIds)
+                {
+                    this.db.Add(new DrugSideEffect { DrugId = (int)dId, SideEffectId = sideEffectId });
+                }
 
-            await this.db.SaveChangesAsync();
+                await this.db.SaveChangesAsync();
+            }
         }
     }
 }

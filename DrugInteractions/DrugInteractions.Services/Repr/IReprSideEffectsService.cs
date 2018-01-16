@@ -9,14 +9,14 @@ namespace DrugInteractions.Services.Repr
     {
         Task<IEnumerable<ReprSideEffectListingServiceModel>> AllAsync();
 
-        Task CreateAsync(SideEffect model);
+        Task<bool> CreateAsync(SideEffect model);
 
-        Task UpdateAsync(SideEffect model);
+        Task<bool> UpdateAsync(SideEffect model);
 
         Task<SideEffect> GetByIdAsync(int id);
 
         Task DeleteAsync(SideEffect model);
 
-        Task DrugsInSideEffect(IEnumerable<int> drugIds, int sideEffectId);
+        Task DrugsInSideEffect(IEnumerable<int?> drugIds, int sideEffectId);
     }
 }
