@@ -41,7 +41,7 @@ namespace DrugInteractions.Web.Areas.Repr.Controllers
             {
                 DrugGroups = await this.populator.GetDrugGroups(),
                 Brands = await this.populator.GetBrands(),
-                SideEffects=await this.populator.GetSideEffects()
+                SideEffects = await this.populator.GetSideEffects()
             };
 
             return View(model);
@@ -77,7 +77,10 @@ namespace DrugInteractions.Web.Areas.Repr.Controllers
                 return View(model);
             }
 
-            await this.reprDrugsService.SideEffectsInDrug(model.SideEffectIds, dbModel.Id);
+            if (model.SideEffectIds != null)
+            {
+                await this.reprDrugsService.SideEffectsInDrug(model.SideEffectIds, dbModel.Id);
+            }
 
             TempData.AddSuccessMessage($"Drug {model.Name} successfully created.");
             return RedirectToAction(nameof(Index));
