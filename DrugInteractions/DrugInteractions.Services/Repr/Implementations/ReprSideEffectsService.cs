@@ -67,17 +67,14 @@ namespace DrugInteractions.Services.Repr.Implementations
             await this.db.SaveChangesAsync();
         }
 
-        public async Task DrugsInSideEffect(IEnumerable<int?> drugIds, int sideEffectId)
+        public async Task DrugsInSideEffect(IEnumerable<int> drugIds, int sideEffectId)
         {
-            if (drugIds != null)
+            foreach (var dId in drugIds)
             {
-                foreach (var dId in drugIds)
-                {
-                    this.db.Add(new DrugSideEffect { DrugId = (int)dId, SideEffectId = sideEffectId });
-                }
-
-                await this.db.SaveChangesAsync();
+                this.db.Add(new DrugSideEffect { DrugId = dId, SideEffectId = sideEffectId });
             }
+
+            await this.db.SaveChangesAsync();
         }
     }
 }
